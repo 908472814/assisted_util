@@ -1,0 +1,14 @@
+Student
+	id Long
+	name String(3,255)
+	age String(7,16)
+
+Course
+	id Long
+	name String(5,25)
+	
+SelectiveCourses
+	id Long
+	course_id Long => Course.id(n:1)
+	student_id Long => Student.id(1:n)
+	selected_time Timestamp
