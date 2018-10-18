@@ -3,6 +3,7 @@ Student
 	name String(3,255)
 	age String(7,16)
 	weight String(0,255)
+	height String(0,255)
 
 Course
 	id Long
