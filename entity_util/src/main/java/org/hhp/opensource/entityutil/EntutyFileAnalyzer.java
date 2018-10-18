@@ -73,7 +73,7 @@ public class EntutyFileAnalyzer {
 				FieldSpec fieldSpec = FieldSpec.builder(this.typeMap.get(colunmType), colunmName, Modifier.PRIVATE).build();
 				classBuilder.addField(fieldSpec);
 				
-				//TODO 注解11
+				//TODO 注解11233
 				
 				//方法
 				char firstChar = Character.toUpperCase(colunmName.charAt(0));
