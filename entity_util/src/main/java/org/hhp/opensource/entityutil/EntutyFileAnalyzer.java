@@ -73,8 +73,6 @@ public class EntutyFileAnalyzer {
 				FieldSpec fieldSpec = FieldSpec.builder(this.typeMap.get(colunmType), colunmName, Modifier.PRIVATE).build();
 				classBuilder.addField(fieldSpec);
 				
-				//TODO 注解
-				
 				//方法
 				char firstChar = Character.toUpperCase(colunmName.charAt(0));
 				char [] bigColunmNameChars =colunmName.toCharArray();
@@ -173,7 +171,7 @@ public class EntutyFileAnalyzer {
 	}
 
 	public static void main(String[] args) throws IOException {
-		String url = "G:\\develop\\codeSpace\\openSource\\entity_util\\entity_util\\src\\main\\java\\org\\hhp\\opensource\\entityutil\\courseSystem.txt";
+		String url = "D:\\hehuabing\\wkp\\stu\\entity_util\\src\\main\\java\\org\\hhp\\opensource\\entityutil\\courseSystem.txt";
 		EntutyFileAnalyzer a = new EntutyFileAnalyzer(url);
 		a.analyse().generateJpaSource();
 		System.out.println(a.print());
