@@ -9,20 +9,17 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.sql.Timestamp;
-
-import javax.lang.model.element.Modifier;
-
-import org.hhp.opensource.entityutil.v2.EntityColumn;
-import org.hhp.opensource.entityutil.v2.EntityDefinitionBlock;
-import org.hhp.opensource.entityutil.v2.EntityStructure;
-import org.hhp.opensource.entityutil.v2.ReferenceColnum;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 import java.util.regex.Pattern;
+import javax.lang.model.element.Modifier;
+import org.hhp.opensource.entityutil.structure.EntityColumn;
+import org.hhp.opensource.entityutil.structure.EntityDefinitionBlock;
+import org.hhp.opensource.entityutil.structure.EntityReferenceColnum;
+import org.hhp.opensource.entityutil.structure.EntityStructure;
 import com.alibaba.fastjson.JSONObject;
 import com.squareup.javapoet.AnnotationSpec;
 import com.squareup.javapoet.ClassName;
@@ -31,7 +28,6 @@ import com.squareup.javapoet.FieldSpec;
 import com.squareup.javapoet.JavaFile;
 import com.squareup.javapoet.MethodSpec;
 import com.squareup.javapoet.ParameterSpec;
-import com.squareup.javapoet.TypeName;
 import com.squareup.javapoet.TypeSpec;
 import com.squareup.javapoet.TypeSpec.Builder;
 import jodd.util.StringUtil;
@@ -185,7 +181,7 @@ public class EntutyFileAnalyzer {
 			columnes.setType(type);
 			columnes.setRangeOfValue(rangeOfValue);
 			if (line.indexOf("=>") != -1) {
-				ReferenceColnum rc = new ReferenceColnum();
+				EntityReferenceColnum rc = new EntityReferenceColnum();
 				String rcString = line.split("=>")[1].trim();
 				rc.setReferencedEntity(rcString.split("\\.")[0]);
 				rc.setReferencedColumn(rcString.split("\\.")[1]);

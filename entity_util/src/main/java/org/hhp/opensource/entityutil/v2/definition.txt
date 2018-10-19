@@ -1,7 +1,0 @@
-tableName#"表名称"#
-	column
-		columnName dataType #"字段名称"# -> otherName.columnName(1:1)
-		columnName2 dataType #"字段名称2"#
-	index
-		unique btree(columnName,columnName2)
-	
