@@ -1,4 +1,4 @@
-package org.hhp.opensource.entityutil;
+package org.hhp.opensource.entityutil.v2;
 
 public class ReferenceColnum {
 	private String referencedEntity;

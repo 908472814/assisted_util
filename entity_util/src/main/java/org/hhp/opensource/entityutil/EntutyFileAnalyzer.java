@@ -11,6 +11,12 @@ import java.nio.file.Paths;
 import java.sql.Timestamp;
 
 import javax.lang.model.element.Modifier;
+
+import org.hhp.opensource.entityutil.v2.EntityColumn;
+import org.hhp.opensource.entityutil.v2.EntityDefinitionBlock;
+import org.hhp.opensource.entityutil.v2.EntityStructure;
+import org.hhp.opensource.entityutil.v2.ReferenceColnum;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
