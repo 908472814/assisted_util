@@ -5,7 +5,25 @@ import java.util.List;
 public class EntityDefinitionBlock {
 
 	private String name;
+	private String comment;
 	private List<EntityColumn> columnes;
+	private List<EntityIndex> indexs;
+
+	public List<EntityIndex> getIndexs() {
+		return indexs;
+	}
+
+	public void setIndexs(List<EntityIndex> indexs) {
+		this.indexs = indexs;
+	}
+
+	public String getComment() {
+		return comment;
+	}
+
+	public void setComment(String comment) {
+		this.comment = comment;
+	}
 
 	public String getName() {
 		return name;

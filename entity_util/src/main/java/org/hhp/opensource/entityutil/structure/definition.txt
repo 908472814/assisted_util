@@ -1,7 +1,16 @@
-tableName#"表名称"#
+table_name#'表名称'#
 	column
-		columnName dataType #"字段名称"# -> otherName.columnName(1:1)
-		columnName2 dataType #"字段名称2"#
+		columnName String #"字段名称"# -> otherName.columnName(1:1)
+		columnName2 BigDecimal #"字段名称2"#
 	index
-		unique btree(columnName,columnName2)
-	
+        unique(columnName,columnName2)
+
+student#'学生表'#
+	column
+		name Double #"姓名"# -> tableName.columnName(1:1)
+		age int #"年龄"#
+		
+assessment_cost#'评估成本表'#
+	column
+		id Long #"主键"#
+		inverter_cost BigDecimal #"逆变器成本"#
