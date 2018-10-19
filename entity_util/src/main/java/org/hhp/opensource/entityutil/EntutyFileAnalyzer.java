@@ -18,6 +18,9 @@ import java.util.Map;
 import java.util.Scanner;
 import java.util.regex.Pattern;
 import com.alibaba.fastjson.JSONObject;
+import com.squareup.javapoet.AnnotationSpec;
+import com.squareup.javapoet.ClassName;
+import com.squareup.javapoet.CodeBlock;
 import com.squareup.javapoet.FieldSpec;
 import com.squareup.javapoet.JavaFile;
 import com.squareup.javapoet.MethodSpec;
@@ -67,32 +70,49 @@ public class EntutyFileAnalyzer {
 				
 				//字段
 				String colunmName = c.getName();
+				
+				//数据类型
 				String colunmType = c.getType();
+				
+				//取值范围
 				String columRange = c.getRangeOfValue();
 				
-				FieldSpec fieldSpec = FieldSpec.builder(this.typeMap.get(colunmType), colunmName, Modifier.PRIVATE).build();
+				//注解
+				AnnotationSpec.Builder annotationSpecBuilder = null;
+				if(colunmName.equals("id")) {
+					annotationSpecBuilder = AnnotationSpec.builder(ClassName.get("javax.persistence", "Id"));
+				}else {
+					annotationSpecBuilder = AnnotationSpec.builder(ClassName.get("javax.persistence", "Column"));
+					CodeBlock.Builder codeBlockBuilder = CodeBlock.builder().add("$S", colunmName);
+					annotationSpecBuilder.addMember("name", codeBlockBuilder.build());
+				}
+				
+				//字段
+				String attrName = toHump(colunmName);
+				FieldSpec fieldSpec = FieldSpec.builder(this.typeMap.get(colunmType), attrName, Modifier.PRIVATE)
+						.addAnnotation(annotationSpecBuilder.build())
+						.build();
 				classBuilder.addField(fieldSpec);
 			
-				//TODO 注解
 				
 				//方法
-				char firstChar = Character.toUpperCase(colunmName.charAt(0));
-				char [] bigColunmNameChars =colunmName.toCharArray();
-				bigColunmNameChars[0] = firstChar;
-				String bigColunmName = new String(bigColunmNameChars);
+				char firstChar = Character.toUpperCase(attrName.charAt(0));
+				char [] bigAttrNameChars =attrName.toCharArray();
+				bigAttrNameChars[0] = firstChar;
+				String bigAttrName = new String(bigAttrNameChars);
 				
-				MethodSpec getMethodSpec = MethodSpec.methodBuilder("get" + bigColunmName)
+				MethodSpec getMethodSpec = MethodSpec.methodBuilder("get" + attrName)
 					    .addModifiers(Modifier.PUBLIC)
 					    .returns(this.typeMap.get(colunmType))
-					    .addStatement("return this." + colunmName)
+					    .addStatement("return this." + attrName)
 					    .build();
 				
 				
-				ParameterSpec ps = ParameterSpec.builder(this.typeMap.get(colunmType), colunmName).build();
-				MethodSpec setgMethodSpec = MethodSpec.methodBuilder("set" + bigColunmName)
+				ParameterSpec ps = ParameterSpec.builder(this.typeMap.get(colunmType), attrName).build();
+				MethodSpec setgMethodSpec = MethodSpec.methodBuilder("set" + bigAttrName)
 					    .addModifiers(Modifier.PUBLIC)
 					    .addParameter(ps)
-					    .addStatement("this." + colunmName + "= " + colunmName)
+					    .addStatement("this." + attrName + "= " + attrName)
 					    .build();
 				
 				classBuilder.addMethod(getMethodSpec);
@@ -173,9 +193,28 @@ public class EntutyFileAnalyzer {
 	}
 
 	public static void main(String[] args) throws IOException {
-		String url = "D:\\hehuabing\\wkp\\stu\\entity_util\\src\\main\\java\\org\\hhp\\opensource\\entityutil\\courseSystem.txt";
+		String url = "D:\\hehuabing\\wkp\\stu\\entity_util\\entity_util\\src\\main\\java\\org\\hhp\\opensource\\entityutil\\courseSystem.txt";
 		EntutyFileAnalyzer a = new EntutyFileAnalyzer(url);
 		a.analyse().generateJpaSource();
 		System.out.println(a.print());
+	}
+	
+	private String toHump(String name) {
+		StringBuilder sb = new StringBuilder();
+		
+		boolean low = true;
+		for(int i=0; i<name.length(); i++){
+			if(name.charAt(i)=='_'){
+				low = false;
+			}else{
+				if(low){
+					sb.append(name.charAt(i));
+				}else{
+					sb.append(Character.toUpperCase(name.charAt(i)));
+					low=true;
+				}
+			}
+		}
+		return sb.toString();
 	}
 }

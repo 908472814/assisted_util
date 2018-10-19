@@ -8,6 +8,7 @@ Student
 Course
 	id Long
 	name String(5,25)
+	xxx String(5,10)
 	
 SelectiveCourses
 	id Long
