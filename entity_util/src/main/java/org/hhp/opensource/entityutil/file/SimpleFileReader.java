@@ -157,9 +157,4 @@ public class SimpleFileReader implements FileContentReader{
 		return "other";
 		
 	}
-
-	public static void main(String[] args) throws IOException {
-		EntityStructure es = new SimpleFileReader("D:\\hehuabing\\wkp\\stu\\assisted_util\\entity_util\\src\\main\\java\\org\\hhp\\opensource\\entityutil\\structure\\definition.txt").read();
-		System.out.println(JSON.toJSONString(es));
-	}
 }

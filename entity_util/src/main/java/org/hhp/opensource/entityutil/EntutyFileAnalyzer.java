@@ -70,6 +70,8 @@ public class EntutyFileAnalyzer {
 			List<EntityColumn> clmns = b.getColumnes();
 			clmns.forEach(c ->{
 				
+				//类名
+				
 				//字段
 				String colunmName = c.getName();
 				
@@ -192,13 +194,6 @@ public class EntutyFileAnalyzer {
 			this.e.getBlockes().get(this.e.getBlockes().size() - 1).getColumnes().add(columnes);
 		}
 		return analyse();
-	}
-
-	public static void main(String[] args) throws IOException {
-		String url = "D:\\hehuabing\\wkp\\stu\\entity_util\\entity_util\\src\\main\\java\\org\\hhp\\opensource\\entityutil\\courseSystem.txt";
-		EntutyFileAnalyzer a = new EntutyFileAnalyzer(url);
-		a.analyse().generateJpaSource();
-		System.out.println(a.print());
 	}
 	
 	private String toHump(String name) {
