@@ -1,7 +1,11 @@
-tableName#"表名称"#
+tableName#'表名称'#
 	column
 		columnName dataType #"字段名称"# -> otherName.columnName(1:1)
 		columnName2 dataType #"字段名称2"#
 	index
-		unique btree(columnName,columnName2)
-	
+        unique(columnName,columnName2)
+
+student#'学生表'#
+	column
+		name Int #"姓名"# -> tableName.columnName(1:1)
+		age String #"年龄"#

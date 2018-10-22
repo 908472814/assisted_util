@@ -3,8 +3,17 @@ package org.hhp.opensource.entityutil.structure;
 public class EntityColumn {
 	private String name;
 	private String type;
+	private String comment;
 	private String rangeOfValue;
 	private EntityReferenceColnum referenceColnum;
+	
+	public String getComment() {
+		return comment;
+	}
+
+	public void setComment(String comment) {
+		this.comment = comment;
+	}
 
 	public String getName() {
 		return name;
