@@ -65,15 +65,20 @@ public class SimpleFileReader implements FileContentReader{
 						
 						String referTablecolumn = null;
 						String referencedType = null;
+						EntityReferenceColnum  er = null;
 						if(line.split("->").length>1) {
 							referTablecolumn = refer.split("\\.")[1].split("\\(")[0];
-							referencedType = StringUtil.cutBetween(referTablecolumn, "\\(", "\\)");
+							String referencedTypePattern ="\\(.*\\)";
+							Pattern r = Pattern.compile(referencedTypePattern);
+							Matcher m = r.matcher(line);
+							while(m.find()) {
+								referencedType = m.group(0);
+							}
+							er = new EntityReferenceColnum();
+							er.setReferencedEntity(referTable);
+							er.setType(referencedType);
+							er.setReferencedColumn(referTablecolumn);
 						}
-						
-						EntityReferenceColnum  er = new EntityReferenceColnum();
-						er.setReferencedEntity(referTable);
-						er.setType(referencedType);
-						er.setReferencedColumn(referTablecolumn);
 						
 						EntityColumn ec = new EntityColumn();
 						ec.setName(columnName);
@@ -114,7 +119,6 @@ public class SimpleFileReader implements FileContentReader{
 			}
 		});
 		
-		System.out.println(JSON.toJSONString(structure));
 		return structure;
 	}
 	
@@ -155,6 +159,7 @@ public class SimpleFileReader implements FileContentReader{
 	}
 
 	public static void main(String[] args) throws IOException {
-		new SimpleFileReader("D:\\hehuabing\\wkp\\stu\\assisted_util\\entity_util\\src\\main\\java\\org\\hhp\\opensource\\entityutil\\structure\\definition.txt").read();
+		EntityStructure es = new SimpleFileReader("D:\\hehuabing\\wkp\\stu\\assisted_util\\entity_util\\src\\main\\java\\org\\hhp\\opensource\\entityutil\\structure\\definition.txt").read();
+		System.out.println(JSON.toJSONString(es));
 	}
 }
