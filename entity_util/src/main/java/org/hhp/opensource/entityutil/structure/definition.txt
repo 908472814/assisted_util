@@ -1,16 +1,23 @@
-table_name#'表名称'#
+student #'学生表'#
 	column
-		columnName String #"字段名称"# -> otherName.columnName(1:1)
-		columnName2 BigDecimal #"字段名称2"#
-	index
-        unique(columnName,columnName2)
+		id Long #'主键'# <- book.student_id(1:n)
+		name Double #'姓名'#
+		age Long #'年龄'#
+		class_id Long #'所在班级的主键'# -> clazz.id(n:1)
+		id_card_id Long #'身份证主键'# -> id_card.id(1:1)
 
-student#'学生表'#
+id_card #'身份证表'#
 	column
-		name Double #"姓名"# -> tableName.columnName(1:1)
-		age int #"年龄"#
+		id Long #'主键'# <- student.id_card_id(1:1)
+		code String #'身份证号码'#
+	
+clazz #'班级表'#
+	column
+		id Long #'主键'# <- student.class_id(1:n)
+		name String #'班级名称'#
 		
-assessment_cost#'评估成本表'#
+book #'书本表'#
 	column
-		id Long #"主键"#
-		inverter_cost BigDecimal #"逆变器成本"#
+		id Long #'主键'#
+		name String #'书本名称'#
+		student_id Long #'拥有此书的学生的主键'# -> student.id(n:1)
