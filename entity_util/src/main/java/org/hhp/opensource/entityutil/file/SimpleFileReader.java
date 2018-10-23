@@ -59,7 +59,7 @@ public class SimpleFileReader implements FileContentReader{
 						
 						String columnName = line.split(" ")[0].replaceAll("\t","");
 						String dataType = line.split(" ")[1];
-						String comment = line.split("#'").length>1?StringUtil.cutBetween(line.split(" ")[3], "#'", "'#"):"";
+						String comment = line.split("#'").length>1?StringUtil.cutBetween(line.split(" ")[2], "#'", "'#"):"";
 						String refer = line.split("->").length>1 ? line.split("->")[1].trim():"";
 						String referTable = refer.split("\\.")[0];
 						

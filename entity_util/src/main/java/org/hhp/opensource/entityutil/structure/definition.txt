@@ -1,16 +1,17 @@
-table_name#'表名称'#
+student #'学生表'#
 	column
-		columnName String #"字段名称"# -> otherName.columnName(1:1)
-		columnName2 BigDecimal #"字段名称2"#
-	index
-        unique(columnName,columnName2)
-
-student#'学生表'#
-	column
-		name Double #"姓名"# -> tableName.columnName(1:1)
-		age int #"年龄"#
+		id Long #'主键'#
+		name Double #'姓名'#
+		age Long #'年龄'#
+		class_id Long #'所在班级的主键'# -> clazz.id(n:1)
 		
-assessment_cost#'评估成本表'#
+clazz #'班级表'#
 	column
-		id Long #"主键"#
-		inverter_cost BigDecimal #"逆变器成本"#
+		id Long #'主键'#
+		name String #'班级名称'#
+		
+book #'书本表'#
+	column
+		id Long #'主键'#
+		name String #'书本名称'#
+		student_id Long #'拥有此书的学生的主键'# -> student.id(n:1)
