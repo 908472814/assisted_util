@@ -1,13 +1,19 @@
 student #'学生表'#
 	column
-		id Long #'主键'#
+		id Long #'主键'# <- book.student_id(1:n)
 		name Double #'姓名'#
 		age Long #'年龄'#
 		class_id Long #'所在班级的主键'# -> clazz.id(n:1)
-		
+		id_card_id Long #'身份证主键'# -> id_card.id(1:1)
+
+id_card #'身份证表'#
+	column
+		id Long #'主键'# <- student.id_card_id(1:1)
+		code String #'身份证号码'#
+	
 clazz #'班级表'#
 	column
-		id Long #'主键'#
+		id Long #'主键'# <- student.class_id(1:n)
 		name String #'班级名称'#
 		
 book #'书本表'#
