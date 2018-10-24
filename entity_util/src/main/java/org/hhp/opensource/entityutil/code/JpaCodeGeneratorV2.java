@@ -10,11 +10,8 @@ import java.util.List;
 
 import javax.lang.model.element.Modifier;
 
-import org.hhp.opensource.entityutil.structure.EntityColumn;
-import org.hhp.opensource.entityutil.structure.EntityDefinitionBlock;
-import org.hhp.opensource.entityutil.structure.EntityConnectionLine;
-import org.hhp.opensource.entityutil.structure.EntityStructure;
-import org.hhp.opensource.entityutil.structure.EntityTypeMapper;
+import org.hhp.opensource.entityutil.structure.v2.Entity;
+import org.hhp.opensource.entityutil.structure.v2.EntityColumn;
 import org.hhp.opensource.entityutil.util.Utils;
 
 import com.squareup.javapoet.AnnotationSpec;
@@ -24,43 +21,28 @@ import com.squareup.javapoet.FieldSpec;
 import com.squareup.javapoet.JavaFile;
 import com.squareup.javapoet.MethodSpec;
 import com.squareup.javapoet.ParameterSpec;
-import com.squareup.javapoet.ParameterizedTypeName;
 import com.squareup.javapoet.TypeName;
 import com.squareup.javapoet.TypeSpec;
 import com.squareup.javapoet.TypeSpec.Builder;
 
 public class JpaCodeGeneratorV2 {
 	
-	public void generator(EntityStructure entityStructure,String packageName,String target) {
+	public void generator(List<Entity> entityList,String packageName,String target) {
 		
-		List<EntityDefinitionBlock> blockes = entityStructure.getBlockes();
-		blockes.forEach(blocke ->{
+		entityList.forEach(entiry ->{
 			
-			//class
-			String className = Utils.firstChar2UpperCase(Utils.toHump(blocke.getName())).trim();
-			Builder classBuilder = TypeSpec.classBuilder(className).addModifiers(Modifier.PUBLIC);
-			
-			//classs的@Table
-			AnnotationSpec.Builder entityAntt = AnnotationSpec.builder(ClassName.get("javax.persistence", "Entity"));
-			
-			//classs的@Table
-			AnnotationSpec.Builder tableAntt = AnnotationSpec.builder(ClassName.get("javax.persistence", "Table"));
-			CodeBlock.Builder tableAnttCodeBuilder = CodeBlock.builder().add("$S", blocke.getName());
-			tableAntt.addMember("name", tableAnttCodeBuilder.build());
-			
-			//添加注解
-			classBuilder.addAnnotation(entityAntt.build()).addAnnotation(tableAntt.build());
+			String className = Utils.firstChar2UpperCase(Utils.toHump(entiry.getEntityName())).trim();
+			Builder classBuilder = createClassBuilder(className,entiry.getEntityName());
 			
 			//@Column注解 映射关系注解 getter,setter
-			List<EntityColumn> columnes = blocke.getColumnes();
+			List<EntityColumn> columnes = entiry.getEntityColumnes();
 			columnes.forEach(columne->{
-				EntityConnectionLine connectionLine = columne.getConnectionLine();
-				FieldSpec.Builder fieldBuilder = null;
-				classBuilder.addField(fieldBuilder.build());
+				
 			});
 
-			JavaFile javaFile = JavaFile.builder(packageName, classBuilder.build()).build();
 			
+			
+			JavaFile javaFile = JavaFile.builder(packageName, classBuilder.build()).build();
 			try {
 				Path path = Paths.get(target + "/" + className + ".java");
 				PrintStream p = new PrintStream(Files.newOutputStream(path));
@@ -71,6 +53,23 @@ public class JpaCodeGeneratorV2 {
 			}
 		});
 		
+	}
+	
+	private Builder createClassBuilder(String className,String entityName) {
+		//class
+		Builder classBuilder = TypeSpec.classBuilder(className).addModifiers(Modifier.PUBLIC);
+		
+		//classs的@Table
+		AnnotationSpec.Builder entityAntt = AnnotationSpec.builder(ClassName.get("javax.persistence", "Entity"));
+		
+		//classs的@Table
+		AnnotationSpec.Builder tableAntt = AnnotationSpec.builder(ClassName.get("javax.persistence", "Table"));
+		CodeBlock.Builder tableAnttCodeBuilder = CodeBlock.builder().add("$S", entityName);
+		tableAntt.addMember("name", tableAnttCodeBuilder.build());
+		
+		//添加注解
+		classBuilder.addAnnotation(entityAntt.build()).addAnnotation(tableAntt.build());
+		return classBuilder;
 	}
 	
 	private void addGetter(Builder classBuilder,String attrName,TypeName colunmType) {
