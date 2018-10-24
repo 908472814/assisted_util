@@ -9,14 +9,12 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
 import org.hhp.opensource.entityutil.structure.EntityColumn;
+import org.hhp.opensource.entityutil.structure.EntityConnectionLine;
 import org.hhp.opensource.entityutil.structure.EntityDefinitionBlock;
 import org.hhp.opensource.entityutil.structure.EntityIndex;
-import org.hhp.opensource.entityutil.structure.EntityReferenceColnum;
 import org.hhp.opensource.entityutil.structure.EntityStructure;
-
-import com.alibaba.fastjson.JSON;
+import org.hhp.opensource.entityutil.util.Utils;
 
 import jodd.util.StringUtil;
 public class SimpleFileReader implements FileContentReader{
@@ -29,7 +27,7 @@ public class SimpleFileReader implements FileContentReader{
 		Path path = Paths.get(filePath);
 		this.fileLines = Files.readAllLines(path);
 	}
-
+	
 	@Override
 	public EntityStructure read() {
 		
@@ -38,7 +36,6 @@ public class SimpleFileReader implements FileContentReader{
 		structure.setBlockes(blockes);
 		
 		fileLines.forEach(line ->{
-			
 			if(StringUtil.isNotBlank(line)) {
 				String lineType = checkLineType(line);
 				if("table".equals(lineType)) {
@@ -51,40 +48,20 @@ public class SimpleFileReader implements FileContentReader{
 				}else if("column".equals(lineType)) {
 					if(blockes.size()>0) {
 						EntityDefinitionBlock block = blockes.get(blockes.size()-1);
+						
 						List<EntityColumn> columnes = block.getColumnes();
 						if(null==columnes) {
 							columnes = new LinkedList<>();
 							block.setColumnes(columnes);
 						}
 						
+						String tableName = block.getName();
 						String columnName = line.split(" ")[0].replaceAll("\t","");
 						String dataType = line.split(" ")[1];
 						String comment = line.split("#'").length>1?StringUtil.cutBetween(line.split(" ")[2], "#'", "'#"):"";
-						String refer = line.split("->").length>1 ? line.split("->")[1].trim():"";
-						String referTable = refer.split("\\.")[0];
+						EntityConnectionLine  er = createLine(tableName,line);
 						
-						String referTablecolumn = null;
-						String referencedType = null;
-						EntityReferenceColnum  er = null;
-						if(line.split("->").length>1) {
-							referTablecolumn = refer.split("\\.")[1].split("\\(")[0];
-							String referencedTypePattern ="\\(.*\\)";
-							Pattern r = Pattern.compile(referencedTypePattern);
-							Matcher m = r.matcher(line);
-							while(m.find()) {
-								referencedType = m.group(0);
-							}
-							er = new EntityReferenceColnum();
-							er.setReferencedEntity(referTable);
-							er.setType(referencedType);
-							er.setReferencedColumn(referTablecolumn);
-						}
-						
-						EntityColumn ec = new EntityColumn();
-						ec.setName(columnName);
-						ec.setType(dataType);
-						ec.setComment(comment);
-						ec.setReferenceColnum(er);
+						EntityColumn ec = new EntityColumn(columnName, dataType, comment, er);
 						
 						columnes.add(ec);
 					}
@@ -120,6 +97,34 @@ public class SimpleFileReader implements FileContentReader{
 		});
 		
 		return structure;
+	}
+	
+	private EntityConnectionLine createLine(String tableName,String line) {
+		String columnName = line.split(" ")[0].replaceAll("\t","");
+		
+		EntityConnectionLine  er = new EntityConnectionLine();
+		
+		if(line.contains("->")) {
+			String refer = line.split("->").length>1 ? line.split("->")[1].trim():"";
+			String referTable = refer.split("\\.")[0];
+			String referColumn = refer.split("\\.")[1].split("\\(")[0];
+			String referType = Utils.matchString(line,"\\(.*\\)");
+			er.addSource(tableName, columnName).addDest(referTable, referColumn).addType(referType);
+		}else if(line.contains("<-")) {
+			String refer = line.split("<-").length>1 ? line.split("<-")[1].trim():"";
+			String referTable = refer.split("\\.")[0];
+			String referColumn = refer.split("\\.")[1].split("\\(")[0];
+			String referType = Utils.matchString(line,"\\(.*\\)");
+			er.addDest(tableName, tableName).addSource(referTable, referColumn).addType(referType);
+		}else if(line.contains("<->")) {
+			String refer = line.split("<->").length>1 ? line.split("<->")[1].trim():"";
+			String referTable = refer.split("\\.")[0];
+			String referColumn = refer.split("\\.")[1].split("\\(")[0];
+			String referType = Utils.matchString(line,"\\(.*\\)");
+			er.addDest(tableName, tableName).addSource(referTable, referColumn).addType(referType);
+		}
+		
+		return er;
 	}
 	
 	private EntityDefinitionBlock createTable(String line) {

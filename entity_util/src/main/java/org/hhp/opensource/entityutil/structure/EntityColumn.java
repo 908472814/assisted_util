@@ -5,7 +5,7 @@ public class EntityColumn {
 	private String type;
 	private String comment;
 	private String rangeOfValue;
-	private EntityReferenceColnum referenceColnum;
+	private EntityConnectionLine connectionLine;
 	
 	public String getComment() {
 		return comment;
@@ -39,12 +39,37 @@ public class EntityColumn {
 		this.rangeOfValue = rangeOfValue;
 	}
 
-	public EntityReferenceColnum getReferenceColnum() {
-		return referenceColnum;
+	public EntityConnectionLine getConnectionLine() {
+		return connectionLine;
 	}
 
-	public void setReferenceColnum(EntityReferenceColnum referenceColnum) {
-		this.referenceColnum = referenceColnum;
+	public void setConnectionLine(EntityConnectionLine connectionLine) {
+		this.connectionLine = connectionLine;
 	}
 
+	public EntityColumn(String name, String type, EntityConnectionLine connectionLine) {
+		this.name = name;
+		this.type = type;
+		this.connectionLine = connectionLine;
+	}
+
+	public EntityColumn(String name, String type, String comment, EntityConnectionLine connectionLine) {
+		this.name = name;
+		this.type = type;
+		this.comment = comment;
+		this.connectionLine = connectionLine;
+	}
+
+	public EntityColumn(String name, String type, String comment, String rangeOfValue,
+			EntityConnectionLine referenceColnum) {
+		this.name = name;
+		this.type = type;
+		this.comment = comment;
+		this.rangeOfValue = rangeOfValue;
+		this.connectionLine = connectionLine;
+	}
+
+	public EntityColumn() {
+		
+	}
 }
