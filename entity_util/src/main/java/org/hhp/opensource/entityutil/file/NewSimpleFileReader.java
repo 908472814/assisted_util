@@ -35,7 +35,7 @@ public class NewSimpleFileReader{
 				String lineType = checkLineType(line);
 				
 				if("table".equals(lineType)) {
-					entityList.add(new Entity(line));
+					entityList.add(new Entity(line.split("#")[0].trim()));
 					
 				}else if("columnStart".equals(lineType)) {
 					System.out.println("开始解析表字段定义");
