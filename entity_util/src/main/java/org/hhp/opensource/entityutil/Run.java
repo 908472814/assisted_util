@@ -18,6 +18,6 @@ public class Run {
 		System.out.println(JSON.toJSONString(rst));
 
 		JpaCodeGenerator j = new JpaCodeGenerator();
-		j.generator(rst, "org.hhb.opensource.stusystem", "D:\\hehuabing\\wkp\\stu\\entity_util_test\\src\\main\\java\\org\\hhb\\opensource\\stusystem\\");
+		j.generator(rst, "org.hhb.opensource.stusystem.domain", "D:\\hehuabing\\wkp\\stu\\entity_util_test\\src\\main\\java\\org\\hhb\\opensource\\stusystem\\domain\\");
 	}
 }

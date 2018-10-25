@@ -12,10 +12,10 @@ import java.util.Map;
 
 import javax.lang.model.element.Modifier;
 
-import org.hhp.opensource.entityutil.structure.EntityTypeMapper;
 import org.hhp.opensource.entityutil.structure.Entity;
 import org.hhp.opensource.entityutil.structure.EntityColumn;
 import org.hhp.opensource.entityutil.structure.EntityReference;
+import org.hhp.opensource.entityutil.structure.EntityTypeMapper;
 import org.hhp.opensource.entityutil.util.Utils;
 
 import com.squareup.javapoet.AnnotationSpec;
@@ -33,8 +33,9 @@ public class JpaCodeGenerator {
 	
 	private Map<String, Integer> hasDealedfields = new HashMap<>();
 	
-	public void generator(List<Entity> entityList,String packageName,String target) {
+	public Map<String,Builder> createClass(List<Entity> entityList,String packageName,String target) {
 		
+		Map<String,Builder> result = new HashMap<>();
 		entityList.forEach(entiry ->{
 			
 			String className = Utils.firstChar2UpperCase(Utils.toHump(entiry.getEntityName())).trim();
@@ -48,7 +49,7 @@ public class JpaCodeGenerator {
 				createFieldBuilder(classBuilder,entiry,columne,packageName);
 				hasDealedfields.put(columne.getColumnName(), 1);
 			});
-
+			
 			//查询references定义中的n:n,1:n创建字段
 			List<EntityReference> references = entiry.getEntityReferences();
 			references.forEach(r ->{
@@ -57,17 +58,29 @@ public class JpaCodeGenerator {
 				}
 			});
 			
-			JavaFile javaFile = JavaFile.builder(packageName, classBuilder.build()).build();
-			try {
-				Path path = Paths.get(target + "/" + className + ".java");
-				PrintStream p = new PrintStream(Files.newOutputStream(path));
-				javaFile.writeTo(p);
-			} catch (IOException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
+			result.put(className, classBuilder);
 		});
 		
+		return result;
+	}
+	
+	public void generator(List<Entity> entityList,String packageName,String target) {
+		
+		//定义字段生成entity类以及与字段相关的JPA注解
+		Map<String,Builder> bList = createClass(entityList,packageName,target);
+		
+		
+		bList.forEach((k,v)->{
+			JavaFile javaFile = JavaFile.builder(packageName, v.build()).build();
+			Path path = Paths.get(target + "/" + k + ".java");
+			try {
+				PrintStream p = new PrintStream(Files.newOutputStream(path));
+				javaFile.writeTo(p);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		});
 	}
 	
 	private void createFieldBuilder(Builder classBuilder,Entity entity,EntityColumn columne,String packag){
