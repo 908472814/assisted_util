@@ -8,8 +8,7 @@ student #'学生表'#
 	references
 		id_card_id -> id_card.id 1:1
 		class_id -> clazz.id n:1
-		student.id -> course.id n:n
-		
+	
 id_card #'身份证表'#
 	column
 		id Long #'主键'#
@@ -19,7 +18,7 @@ grade #'年级'#
 	column
 		id Long "'主键'"
 		name String #'年级名称'#
-	
+		
 clazz #'班级表'#
 	column
 		id Long #'主键'#
@@ -33,6 +32,8 @@ book #'书本表'#
 		id Long #'主键'#
 		name String #'书本名称'#
 		student_id Long #'拥有此书的学生的主键'#
+	references
+		student_id -> student.id n:1
 
 course #'课程表'#
 	column

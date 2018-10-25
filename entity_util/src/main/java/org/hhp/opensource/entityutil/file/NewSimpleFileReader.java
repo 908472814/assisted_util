@@ -56,18 +56,19 @@ public class NewSimpleFileReader{
 					entity.addColumn(column);
 					
 				}else if("references".equals(lineType)) {
-					Entity entity = entityList.get(entityList.size()-1);
-					
-					String left = line.split("->")[0].trim();
-					String right = line.split(" ")[2].trim();
-					String referenceType = line.split(" ")[3];
-					
-					EntityReference r = new EntityReference();
-					r.setReferenceType(referenceType);
-					r.setReferenced(createReferenced(right,referenceType));
-					r.setReferer(createReferer(left,referenceType));
-					entity.addReference(r);
-					
+					if(lineType.contains("->")) {
+						Entity entity = entityList.get(entityList.size()-1);
+						
+						String left = line.split("->")[0].trim();
+						String right = line.split(" ")[2].trim();
+						String referenceType = line.split(" ")[3];
+						
+						EntityReference r = new EntityReference();
+						r.setReferenceType(referenceType);
+						r.setReferenced(createReferenced(right,referenceType));
+						r.setReferer(createReferer(left,referenceType));
+						entity.addReference(r);
+					}
 				}else if("index".equals(lineType)) {
 					
 				}else {

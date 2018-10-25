@@ -69,7 +69,9 @@ public class JpaCodeGenerator {
 		//定义字段生成entity类以及与字段相关的JPA注解
 		Map<String,Builder> bList = createClass(entityList,packageName,target);
 		
+		//双向关联
 		
+		//多对多关联
 		bList.forEach((k,v)->{
 			JavaFile javaFile = JavaFile.builder(packageName, v.build()).build();
 			Path path = Paths.get(target + "/" + k + ".java");
