@@ -1,6 +1,6 @@
-package org.hhp.opensource.entityutil.structure.v2;
+package org.hhp.opensource.entityutil.structure;
 
-public class EntityReferer extends Referer {
+public class Referer {
 	private String name;
 
 	public String getName() {
@@ -11,7 +11,7 @@ public class EntityReferer extends Referer {
 		this.name = name;
 	}
 
-	public EntityReferer(String name) {
+	public Referer(String name) {
 		this.name = name;
 	}
 }

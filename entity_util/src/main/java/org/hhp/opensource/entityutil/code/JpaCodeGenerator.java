@@ -6,15 +6,16 @@ import java.lang.reflect.Type;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.lang.model.element.Modifier;
 
-import org.hhp.opensource.entityutil.structure.EntityColumn;
-import org.hhp.opensource.entityutil.structure.EntityDefinitionBlock;
-import org.hhp.opensource.entityutil.structure.EntityReferenceColnum;
-import org.hhp.opensource.entityutil.structure.EntityStructure;
 import org.hhp.opensource.entityutil.structure.EntityTypeMapper;
+import org.hhp.opensource.entityutil.structure.Entity;
+import org.hhp.opensource.entityutil.structure.EntityColumn;
+import org.hhp.opensource.entityutil.structure.EntityReference;
 import org.hhp.opensource.entityutil.util.Utils;
 
 import com.squareup.javapoet.AnnotationSpec;
@@ -24,107 +25,39 @@ import com.squareup.javapoet.FieldSpec;
 import com.squareup.javapoet.JavaFile;
 import com.squareup.javapoet.MethodSpec;
 import com.squareup.javapoet.ParameterSpec;
-import com.squareup.javapoet.ParameterizedTypeName;
 import com.squareup.javapoet.TypeName;
 import com.squareup.javapoet.TypeSpec;
 import com.squareup.javapoet.TypeSpec.Builder;
 
 public class JpaCodeGenerator {
 	
-	public void generator(EntityStructure entityStructure,String packageName,String target) {
+	private Map<String, Integer> hasDealedfields = new HashMap<>();
+	
+	public void generator(List<Entity> entityList,String packageName,String target) {
 		
-		List<EntityDefinitionBlock> blockes = entityStructure.getBlockes();
-		blockes.forEach(blocke ->{
+		entityList.forEach(entiry ->{
 			
-			//class
-			String className = Utils.firstChar2UpperCase(Utils.toHump(blocke.getName())).trim();
-			Builder classBuilder = TypeSpec.classBuilder(className).addModifiers(Modifier.PUBLIC);
-			
-			//classs的@Table
-			AnnotationSpec.Builder entityAntt = AnnotationSpec.builder(ClassName.get("javax.persistence", "Entity"));
-			
-			//classs的@Table
-			AnnotationSpec.Builder tableAntt = AnnotationSpec.builder(ClassName.get("javax.persistence", "Table"));
-			CodeBlock.Builder tableAnttCodeBuilder = CodeBlock.builder().add("$S", blocke.getName());
-			tableAntt.addMember("name", tableAnttCodeBuilder.build());
-			
-			//添加注解
-			classBuilder.addAnnotation(entityAntt.build()).addAnnotation(tableAntt.build());
+			String className = Utils.firstChar2UpperCase(Utils.toHump(entiry.getEntityName())).trim();
+			Builder classBuilder = createClassBuilder(className,entiry.getEntityName());
 			
 			//@Column注解 映射关系注解 getter,setter
-			List<EntityColumn> columnes = blocke.getColumnes();
+			List<EntityColumn> columnes = entiry.getEntityColumnes();
+			
+			//遍历定义文件中的所有字段定义,创建字段
 			columnes.forEach(columne->{
-				EntityReferenceColnum reference = columne.getReferenceColnum();
-				FieldSpec.Builder fieldBuilder = null;
-				
-				if(null!=reference && null!= reference.getReferencedEntity() && null!= reference.getReferencedColumn() && null!=reference.getType()) {
+				createFieldBuilder(classBuilder,entiry,columne,packageName);
+				hasDealedfields.put(columne.getColumnName(), 1);
+			});
+
+			//查询references定义中的n:n,1:n创建字段
+			List<EntityReference> references = entiry.getEntityReferences();
+			references.forEach(r ->{
+				if(!hasDealedfields.containsKey(r.getReferer().getName())){
 					
-					//属性设置为被引用的table对应的类名
-					String attrName = Utils.toHump(reference.getReferencedEntity());
-					
-					//被引用的table对应的类名
-					String referenceClassName = Utils.firstChar2UpperCase(Utils.toHump(reference.getReferencedEntity()));
-					
-					if(reference.getType().equals("(1:1)")) {
-						
-						TypeName colunmType = ClassName.get(packageName, referenceClassName);
-						fieldBuilder = FieldSpec.builder(colunmType, attrName, Modifier.PRIVATE);
-						addOrmAttn(fieldBuilder,referenceClassName,columne.getName(),reference.getReferencedColumn(),"OneToOne");
-						addGetter(classBuilder,attrName,colunmType);
-						addSetter(classBuilder,attrName,colunmType);
-						
-					}else if(reference.getType().equals("(1:n)")) {
-						
-						ClassName colunmType = ClassName.get(packageName, referenceClassName);
-						ClassName list = ClassName.get("java.util", "List");
-						TypeName listColumn = ParameterizedTypeName.get(list, colunmType);
-						
-						fieldBuilder = FieldSpec.builder(listColumn, attrName, Modifier.PRIVATE);
-						
-						addOrmAttn(fieldBuilder,referenceClassName,columne.getName(),reference.getReferencedColumn(),"OneToMany");
-						
-						addGetter(classBuilder,attrName,listColumn);
-						addSetter(classBuilder,attrName,listColumn);
-						
-					}else if(reference.getType().equals("(n:1)")) {
-						
-						TypeName colunmType = ClassName.get(packageName, referenceClassName);
-						fieldBuilder = FieldSpec.builder(colunmType, attrName, Modifier.PRIVATE);
-						addOrmAttn(fieldBuilder,referenceClassName,columne.getName(),reference.getReferencedColumn(),"ManyToOne");
-						addGetter(classBuilder,attrName,colunmType);
-						addSetter(classBuilder,attrName,colunmType);
-						
-					}else if(reference.getType().equals("(n:n)")) {
-						
-					}
-					
-				}else {
-					String attrName = Utils.toHump(columne.getName());
-					Type colunmType = EntityTypeMapper.getType(columne.getType());
-					
-					fieldBuilder = FieldSpec.builder(colunmType, attrName, Modifier.PRIVATE);
-					
-					AnnotationSpec.Builder columnAnttBuilder = null;
-					if(attrName.equals("id")) {
-						columnAnttBuilder = AnnotationSpec.builder(ClassName.get("javax.persistence", "Id"));
-					}else {
-						columnAnttBuilder = AnnotationSpec.builder(ClassName.get("javax.persistence", "Column"));
-						CodeBlock.Builder columnAnttCodeBuilder = CodeBlock.builder().add("$S", columne.getName());
-						columnAnttBuilder.addMember("name", columnAnttCodeBuilder.build());
-					}
-					fieldBuilder.addAnnotation(columnAnttBuilder.build());
-					
-					addGetter(classBuilder,attrName,colunmType);
-					addSetter(classBuilder,attrName,colunmType);
 				}
-				
-				classBuilder.addField(fieldBuilder.build());
-				
 			});
 			
-
 			JavaFile javaFile = JavaFile.builder(packageName, classBuilder.build()).build();
-			
 			try {
 				Path path = Paths.get(target + "/" + className + ".java");
 				PrintStream p = new PrintStream(Files.newOutputStream(path));
@@ -135,6 +68,61 @@ public class JpaCodeGenerator {
 			}
 		});
 		
+	}
+	
+	private void createFieldBuilder(Builder classBuilder,Entity entity,EntityColumn columne,String packag){
+		
+		List<EntityReference> rList = entity.getEntityReferences();
+		
+		EntityReference fieldReference = null;
+		for(EntityReference entityReference : rList) {
+			if(entityReference.getReferer().getName().equals(columne.getColumnName())) {
+				fieldReference = entityReference;
+				break;
+			}
+		}
+		
+		FieldSpec.Builder fieldSpec = null;
+		if(null == fieldReference) {
+			String attrName = Utils.toHump(columne.getColumnName());
+			Type type = EntityTypeMapper.getType(columne.getColumnType());
+			fieldSpec = FieldSpec.builder(type,attrName, Modifier.PRIVATE);
+			
+			addColnumAttn(fieldSpec,columne.getColumnName(),type);
+			addGetter(classBuilder,attrName,type);
+			
+		}else {
+			String memberVariable = Utils.createMemberVariable(fieldReference.getReferenced().getEntityName());
+			TypeName type = ClassName.get(packag, Utils.createClassName(memberVariable));
+			fieldSpec = FieldSpec.builder(type,memberVariable, Modifier.PRIVATE);
+			
+			String referencedClassName = Utils.createClassName(fieldReference.getReferenced().getEntityName());
+			String referenceColumnName = fieldReference.getReferenced().getEntityColumnName();
+			addOrmAttn(fieldSpec,referencedClassName,columne.getColumnName(),referenceColumnName, fieldReference.getReferenceType());
+			addGetter(classBuilder,memberVariable,type);
+		}
+		
+		
+		
+		classBuilder.addField(fieldSpec.build());
+		
+	}
+	
+	private Builder createClassBuilder(String className,String entityName) {
+		//class
+		Builder classBuilder = TypeSpec.classBuilder(className).addModifiers(Modifier.PUBLIC);
+		
+		//classs的@Table
+		AnnotationSpec.Builder entityAntt = AnnotationSpec.builder(ClassName.get("javax.persistence", "Entity"));
+		
+		//classs的@Table
+		AnnotationSpec.Builder tableAntt = AnnotationSpec.builder(ClassName.get("javax.persistence", "Table"));
+		CodeBlock.Builder tableAnttCodeBuilder = CodeBlock.builder().add("$S", entityName);
+		tableAntt.addMember("name", tableAnttCodeBuilder.build());
+		
+		//添加注解
+		classBuilder.addAnnotation(entityAntt.build()).addAnnotation(tableAntt.build());
+		return classBuilder;
 	}
 	
 	private void addGetter(Builder classBuilder,String attrName,TypeName colunmType) {
@@ -175,20 +163,43 @@ public class JpaCodeGenerator {
 		classBuilder.addMethod(setgMethodSpec);
 	}
 	
-	private void addOrmAttn(FieldSpec.Builder fieldBuilder,String referenceClassName,String columnName,String referenceColumnName,String ormAttnName) {
-		AnnotationSpec.Builder ormAnttBuilder = AnnotationSpec.builder(ClassName.get("javax.persistence",ormAttnName));
-		CodeBlock.Builder ormAnttCodeBuilder = CodeBlock.builder().add(referenceClassName + ".class");
-		ormAnttBuilder.addMember("targetEntity", ormAnttCodeBuilder.build());
+	private void addOrmAttn(FieldSpec.Builder fieldBuilder,String referencedClassName,String columnName,String referencedColumnName,String ormType) {
 		
-		if(!ormAttnName.equals("oneToMany")) {
-			AnnotationSpec.Builder columnAnttBuilder = AnnotationSpec.builder(ClassName.get("javax.persistence", "JoinColumn"));
-			CodeBlock.Builder columnAnttCodeBuilder = CodeBlock.builder().add("$S", columnName);
-			CodeBlock.Builder columnAnttCodeBuilder2 = CodeBlock.builder().add("$S",referenceColumnName);
-			columnAnttBuilder.addMember("name", columnAnttCodeBuilder.build());
-			columnAnttBuilder.addMember("referencedColumnName", columnAnttCodeBuilder2.build());
-			fieldBuilder.addAnnotation(columnAnttBuilder.build());
+		String orm = null;
+		
+		if ("1:1".equals(ormType)) {
+			orm = "OneToOne";
+		}else if ("n:1".equals(ormType)) {
+			orm = "ManyToOne";
+		}else if ("1:n".equals(ormType)) {
+			orm = "OneToMany";
+		}else if ("n:n".equals(ormType)) {
+			orm = "ManyToMany";
 		}
 		
+		AnnotationSpec.Builder ormAnttBuilder = AnnotationSpec.builder(ClassName.get("javax.persistence",orm));
+		CodeBlock.Builder ormAnttCodeBuilder = CodeBlock.builder().add(referencedClassName + ".class");
+		ormAnttBuilder.addMember("targetEntity", ormAnttCodeBuilder.build());
+		
+		AnnotationSpec.Builder columnAnttBuilder = AnnotationSpec.builder(ClassName.get("javax.persistence", "JoinColumn"));
+		CodeBlock.Builder columnAnttCodeBuilder = CodeBlock.builder().add("$S", columnName);
+		CodeBlock.Builder columnAnttCodeBuilder2 = CodeBlock.builder().add("$S",referencedColumnName);
+		columnAnttBuilder.addMember("name", columnAnttCodeBuilder.build());
+		columnAnttBuilder.addMember("referencedColumnName", columnAnttCodeBuilder2.build());
+		fieldBuilder.addAnnotation(columnAnttBuilder.build());
+		
 		fieldBuilder.addAnnotation(ormAnttBuilder.build());
+	}
+	
+	private void addColnumAttn(FieldSpec.Builder fieldBuilder,String columneName,Type colunmType) {
+		AnnotationSpec.Builder columnAnttBuilder = null;
+		if(columneName.equals("id")) {
+			columnAnttBuilder = AnnotationSpec.builder(ClassName.get("javax.persistence", "Id"));
+		}else {
+			columnAnttBuilder = AnnotationSpec.builder(ClassName.get("javax.persistence", "Column"));
+			CodeBlock.Builder columnAnttCodeBuilder = CodeBlock.builder().add("$S", columneName);
+			columnAnttBuilder.addMember("name", columnAnttCodeBuilder.build());
+		}
+		fieldBuilder.addAnnotation(columnAnttBuilder.build());
 	}
 }

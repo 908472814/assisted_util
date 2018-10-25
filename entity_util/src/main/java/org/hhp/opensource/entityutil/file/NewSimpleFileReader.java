@@ -7,13 +7,12 @@ import java.nio.file.Paths;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.regex.Pattern;
-import org.hhp.opensource.entityutil.structure.v2.ColumnReferer;
-import org.hhp.opensource.entityutil.structure.v2.Entity;
-import org.hhp.opensource.entityutil.structure.v2.EntityColumn;
-import org.hhp.opensource.entityutil.structure.v2.EntityReference;
-import org.hhp.opensource.entityutil.structure.v2.EntityReferer;
-import org.hhp.opensource.entityutil.structure.v2.Referenced;
-import org.hhp.opensource.entityutil.structure.v2.Referer;
+
+import org.hhp.opensource.entityutil.structure.Entity;
+import org.hhp.opensource.entityutil.structure.EntityColumn;
+import org.hhp.opensource.entityutil.structure.EntityReference;
+import org.hhp.opensource.entityutil.structure.Referenced;
+import org.hhp.opensource.entityutil.structure.Referer;
 
 import jodd.util.StringUtil;
 public class NewSimpleFileReader{
@@ -82,20 +81,12 @@ public class NewSimpleFileReader{
 	
 	private Referenced createReferenced(String right,String referenceType) {
 		
-		Referenced r = new Referenced(right,referenceType);
+		Referenced r = new Referenced(right);
 		return r;
 	}
 	
 	private Referer createReferer(String left,String referenceType) {
-		Referer referer = null;
-		if("n:n".equals(referenceType)) {
-			referer = new EntityReferer(left);
-		}else if("1:n".equals(referenceType)){
-			throw new RuntimeException("不支持1:n");
-		}else {
-			referer = new ColumnReferer(left);
-		}
-		return referer;
+		return new Referer(left);
 	}
 	
 	

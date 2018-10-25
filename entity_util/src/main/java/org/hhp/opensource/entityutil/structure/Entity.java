@@ -1,4 +1,4 @@
-package org.hhp.opensource.entityutil.structure.v2;
+package org.hhp.opensource.entityutil.structure;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,8 +9,8 @@ import java.util.List;
 public class Entity {
 
 	private String entityName;
-	private List<EntityColumn> entityColumnes = new ArrayList<>();;
-	private List<EntityReference> entityReferences = new ArrayList<>();;
+	private List<EntityColumn> entityColumnes = new ArrayList<>();
+	private List<EntityReference> entityReferences = new ArrayList<>();
 
 	public String getEntityName() {
 		return entityName;

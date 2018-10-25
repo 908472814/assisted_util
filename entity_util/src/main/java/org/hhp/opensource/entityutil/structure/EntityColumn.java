@@ -1,75 +1,66 @@
 package org.hhp.opensource.entityutil.structure;
 
+/**
+ * 实体字段定义
+ */
 public class EntityColumn {
-	private String name;
-	private String type;
-	private String comment;
-	private String rangeOfValue;
-	private EntityConnectionLine connectionLine;
 	
-	public String getComment() {
-		return comment;
+	/**
+	 * 字段名称
+	 */
+	private String columnName;
+	
+	/**
+	 * 字段类型
+	 */
+	private String columnType;
+	
+	/**
+	 * 字段注释
+	 */
+	private String columnComment;
+	
+	/**
+	 * 字段取值范围
+	 */
+	private String columnRange;
+
+	public String getColumnName() {
+		return columnName;
 	}
 
-	public void setComment(String comment) {
-		this.comment = comment;
+	public EntityColumn(String columnName, String columnType, String columnComment) {
+		this.columnName = columnName;
+		this.columnType = columnType;
+		this.columnComment = columnComment;
 	}
 
-	public String getName() {
-		return name;
+	public void setColumnName(String columnName) {
+		this.columnName = columnName;
 	}
 
-	public void setName(String name) {
-		this.name = name;
+	public String getColumnType() {
+		return columnType;
 	}
 
-	public String getType() {
-		return type;
+	public void setColumnType(String columnType) {
+		this.columnType = columnType;
 	}
 
-	public void setType(String type) {
-		this.type = type;
+	public String getColumnComment() {
+		return columnComment;
 	}
 
-	public String getRangeOfValue() {
-		return rangeOfValue;
+	public void setColumnComment(String columnComment) {
+		this.columnComment = columnComment;
 	}
 
-	public void setRangeOfValue(String rangeOfValue) {
-		this.rangeOfValue = rangeOfValue;
+	public String getColumnRange() {
+		return columnRange;
 	}
 
-	public EntityConnectionLine getConnectionLine() {
-		return connectionLine;
+	public void setColumnRange(String columnRange) {
+		this.columnRange = columnRange;
 	}
 
-	public void setConnectionLine(EntityConnectionLine connectionLine) {
-		this.connectionLine = connectionLine;
-	}
-
-	public EntityColumn(String name, String type, EntityConnectionLine connectionLine) {
-		this.name = name;
-		this.type = type;
-		this.connectionLine = connectionLine;
-	}
-
-	public EntityColumn(String name, String type, String comment, EntityConnectionLine connectionLine) {
-		this.name = name;
-		this.type = type;
-		this.comment = comment;
-		this.connectionLine = connectionLine;
-	}
-
-	public EntityColumn(String name, String type, String comment, String rangeOfValue,
-			EntityConnectionLine referenceColnum) {
-		this.name = name;
-		this.type = type;
-		this.comment = comment;
-		this.rangeOfValue = rangeOfValue;
-		this.connectionLine = connectionLine;
-	}
-
-	public EntityColumn() {
-		
-	}
 }

@@ -1,4 +1,4 @@
-package org.hhp.opensource.entityutil.structure.v2;
+package org.hhp.opensource.entityutil.structure;
 
 /**
  * 实体的引用对象

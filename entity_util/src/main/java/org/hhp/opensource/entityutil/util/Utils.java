@@ -90,4 +90,12 @@ public class Utils {
 		}
 		return result;
 	}
+	
+	public static String createClassName(String str) {
+		return Utils.firstChar2UpperCase(Utils.toHump(str));
+	}
+	
+	public static String createMemberVariable(String str) {
+		return Utils.toHump(str);
+	}
 }
