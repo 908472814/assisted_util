@@ -12,6 +12,8 @@ public class Entity {
 	private List<EntityColumn> entityColumnes = new ArrayList<>();
 	private List<EntityReference> entityReferences = new ArrayList<>();
 
+	
+	
 	public String getEntityName() {
 		return entityName;
 	}
@@ -42,6 +44,17 @@ public class Entity {
 	
 	public void addReference(EntityReference entityReference) {
 		this.entityReferences.add(entityReference);
+	}
+	
+	public List<EntityReference> getEntityReference(String entityColumn){
+		List<EntityReference> selected = new ArrayList<>();
+		
+		this.entityReferences.forEach(r->{
+			if(null!=entityColumn && entityColumn.equals(r.getReferer().getName())) {
+				selected.add(r);
+			}
+		});
+		return selected;
 	}
 	
 	public Entity(String entityName) {
