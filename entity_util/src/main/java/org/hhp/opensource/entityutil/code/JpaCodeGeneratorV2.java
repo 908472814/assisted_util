@@ -30,11 +30,8 @@ public class JpaCodeGeneratorV2 {
 	public void generate(List<Entity> entityList,String packageName,String target) {
 		
 		entityList.forEach(entiry ->{
-			String className = Utils.createClassName(entiry.getEntityName().trim());
-			ClassBuilder classBuilder = this.relatedEntityBuilder.get("className");
-			if(null == classBuilder) {
-				classBuilder = createClassBuilder(className,entiry.getEntityName());
-			}
+			
+			ClassBuilder classBuilder = createClass(entiry);
 			
 			for(EntityColumn column : entiry.getEntityColumnes()) {
 				createFieldBuilder(classBuilder,entiry,column,packageName);
@@ -47,6 +44,17 @@ public class JpaCodeGeneratorV2 {
 				e.printStackTrace();
 			}
 		});
+	}
+	
+	private ClassBuilder createClass(Entity entiry) {
+		
+		String className = Utils.createClassName(entiry.getEntityName().trim());
+		ClassBuilder classBuilder = this.relatedEntityBuilder.get(className);
+		if(null == classBuilder) {
+			classBuilder = createClassBuilder(className,entiry.getEntityName());
+		}
+		
+		return classBuilder;
 	}
 	
 	private void createFieldBuilder(ClassBuilder classBuilder,Entity entity,EntityColumn columne,String packag){
@@ -66,9 +74,10 @@ public class JpaCodeGeneratorV2 {
 		FieldSpec.Builder fieldSpec = FieldSpec.builder(EntityTypeMapper.getType(columnType), fieldName,Modifier.PRIVATE);
 		fieldBuilder.setFieldSpec(fieldSpec);
 		addColnumAttn(fieldBuilder);
-		classBuilder.addAnnotationSpec(fieldBuilder);
+		classBuilder.addClassFieldBuilder(fieldBuilder);
 		
 		//引用以及注解
+		
 		
 		//被引用的对象
 		
