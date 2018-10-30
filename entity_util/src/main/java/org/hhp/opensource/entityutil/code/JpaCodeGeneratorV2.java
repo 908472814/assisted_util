@@ -74,10 +74,9 @@ public class JpaCodeGeneratorV2 {
 		FieldSpec.Builder fieldSpec = FieldSpec.builder(EntityTypeMapper.getType(columnType), fieldName,Modifier.PRIVATE);
 		fieldBuilder.setFieldSpec(fieldSpec);
 		addColnumAttn(fieldBuilder);
-		classBuilder.addClassFieldBuilder(fieldBuilder);
+		classBuilder.addAnnotationSpec(fieldBuilder);
 		
 		//引用以及注解
-		
 		
 		//被引用的对象
 		

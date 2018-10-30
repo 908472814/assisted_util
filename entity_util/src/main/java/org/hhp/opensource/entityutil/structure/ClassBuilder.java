@@ -19,7 +19,7 @@ public class ClassBuilder {
 	
 	private List<ClassFieldBuilder> classFieldBuilderes = new ArrayList<>();
 	
-	private List<AnnotationSpec.Builder> annotationBuilderes= new ArrayList<>();
+	private List<AnnotationSpec.Builder> annotationSpec = new ArrayList<>();
 	
 	private TypeSpec.Builder classBuilder;
 	
@@ -35,7 +35,7 @@ public class ClassBuilder {
 			this.classBuilder.addMethod(m);
 		});
 		
-		annotationBuilderes.forEach(a->{
+		annotationSpec.forEach(a->{
 			this.classBuilder.addAnnotation(a.build());
 		});
 		
@@ -48,11 +48,26 @@ public class ClassBuilder {
 		PrintStream p = new PrintStream(Files.newOutputStream(path));
 		javaFile.writeTo(p);
 	}
+	
+	public List<ClassFieldBuilder> getClassFieldBuilderes() {
+		return classFieldBuilderes;
+	}
 
-	public void addClassFieldBuilder(ClassFieldBuilder classFieldBuilder) {
+	public void setClassFieldBuilderes(List<ClassFieldBuilder> classFieldBuilderes) {
+		this.classFieldBuilderes = classFieldBuilderes;
+	}
+
+	public void addAnnotationSpec(ClassFieldBuilder classFieldBuilder) {
 		classFieldBuilderes.add(classFieldBuilder);
 	}
 	
+	public List<AnnotationSpec.Builder> getAnnotationSpec() {
+		return annotationSpec;
+	}
+
+	public void setAnnotationSpec(List<AnnotationSpec.Builder> annotationSpec) {
+		this.annotationSpec = annotationSpec;
+	}
 
 	public String getClassName() {
 		return className;
@@ -69,13 +84,6 @@ public class ClassBuilder {
 	public void setClassBuilder(TypeSpec.Builder classBuilder) {
 		this.classBuilder = classBuilder;
 	}
-
-	public List<AnnotationSpec.Builder> getAnnotationBuilderes() {
-		return annotationBuilderes;
-	}
-
-	public void setAnnotationBuilderes(List<AnnotationSpec.Builder> annotationBuilderes) {
-		this.annotationBuilderes = annotationBuilderes;
-	}
+	
 	
 }
