@@ -18,7 +18,7 @@ public class ClassFieldBuilder {
 	
 	public FieldSpec builder() {
 		for(AnnotationSpec.Builder b: this.annotationSpec) {
-			this.fieldSpec.addAnnotation(b.build()); 
+			this.fieldSpec.addAnnotation(b.build());   
 		}
 		return this.fieldSpec.build();
 	}

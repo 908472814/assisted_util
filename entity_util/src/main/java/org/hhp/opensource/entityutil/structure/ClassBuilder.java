@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 import com.squareup.javapoet.AnnotationSpec;
 import com.squareup.javapoet.JavaFile;
-import com.squareup.javapoet.MethodSpec;
+import com.squareup.javapoet.MethodSpec; 
 import com.squareup.javapoet.TypeSpec;
 
 public class ClassBuilder {

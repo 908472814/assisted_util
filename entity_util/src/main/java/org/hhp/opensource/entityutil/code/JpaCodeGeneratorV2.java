@@ -68,7 +68,7 @@ public class JpaCodeGeneratorV2 {
 		String fieldName = Utils.createMemberVariable(columneName);
 		ClassFieldBuilder fieldBuilder = new ClassFieldBuilder();
 		FieldSpec.Builder fieldSpec = FieldSpec.builder(EntityTypeMapper.getType(columnType), fieldName,Modifier.PRIVATE);
-		fieldBuilder.setFieldName(fieldName);
+		fieldBuilder.setFieldName(fieldName); 
 		fieldBuilder.setFieldType(columnType);
 		fieldBuilder.setFieldSpec(fieldSpec);
 		addColnumAttn(fieldBuilder);
