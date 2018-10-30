@@ -64,21 +64,19 @@ public class JpaCodeGeneratorV2 {
 		
 		List<EntityReference> reference = entity.getEntityReference(columneName);
 		
-		//字段，以及注解,getter,setter
+		//字段以及注解 
 		String fieldName = Utils.createMemberVariable(columneName);
-		
 		ClassFieldBuilder fieldBuilder = new ClassFieldBuilder();
+		FieldSpec.Builder fieldSpec = FieldSpec.builder(EntityTypeMapper.getType(columnType), fieldName,Modifier.PRIVATE);
 		fieldBuilder.setFieldName(fieldName);
 		fieldBuilder.setFieldType(columnType);
-		
-		FieldSpec.Builder fieldSpec = FieldSpec.builder(EntityTypeMapper.getType(columnType), fieldName,Modifier.PRIVATE);
 		fieldBuilder.setFieldSpec(fieldSpec);
 		addColnumAttn(fieldBuilder);
-		classBuilder.addAnnotationSpec(fieldBuilder);
+		classBuilder.addClassFieldBuilder(fieldBuilder);
 		
-		//引用以及注解
+		//引用对象属性以及注解
 		
-		//被引用的对象
+		//被引用对象属性以及注解
 		
 	}
 	
@@ -99,7 +97,7 @@ public class JpaCodeGeneratorV2 {
 		
 		ClassBuilder b = new ClassBuilder();
 		b.setClassName(className);
-		b.setClassBuilder(classBuilder);
+		b.setClassType(classBuilder);
 		
 		return b;
 	}

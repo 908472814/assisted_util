@@ -16,20 +16,15 @@ public class ClassFieldBuilder {
 	
 	private List<AnnotationSpec.Builder> annotationSpec = new ArrayList<>();
 	
-	private List<MethodSpec.Builder> methodSpec = new ArrayList<>();
-	
 	public FieldSpec builder() {
 		for(AnnotationSpec.Builder b: this.annotationSpec) {
-			this.fieldSpec.addAnnotation(b.build());
+			this.fieldSpec.addAnnotation(b.build()); 
 		}
 		return this.fieldSpec.build();
 	}
 	
 	public List<MethodSpec> buildSetterAndGetter(){
 		List<MethodSpec> s = new ArrayList<>();
-		this.methodSpec.forEach(m->{
-			s.add(m.build());
-		});
 		return s;
 	}
 	
@@ -68,13 +63,5 @@ public class ClassFieldBuilder {
 
 	public void addAnnotationSpec(AnnotationSpec.Builder annotationSpec) {
 		this.annotationSpec.add(annotationSpec);
-	}
-	
-	public List<MethodSpec.Builder> getMethodSpec() {
-		return methodSpec;
-	}
-
-	public void setMethodSpec(List<MethodSpec.Builder> methodSpec) {
-		this.methodSpec = methodSpec;
 	}
 }

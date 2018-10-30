@@ -7,7 +7,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
-
 import com.squareup.javapoet.AnnotationSpec;
 import com.squareup.javapoet.JavaFile;
 import com.squareup.javapoet.MethodSpec;
@@ -17,29 +16,29 @@ public class ClassBuilder {
 	
 	private String className;
 	
+	private TypeSpec.Builder classType; 
+	
 	private List<ClassFieldBuilder> classFieldBuilderes = new ArrayList<>();
 	
 	private List<AnnotationSpec.Builder> annotationSpec = new ArrayList<>();
-	
-	private TypeSpec.Builder classBuilder;
 	
 	public TypeSpec build() {
 		
 		List<MethodSpec> allGetterAndSetter = new ArrayList<>();
 		for(ClassFieldBuilder f :this.classFieldBuilderes) {
 			allGetterAndSetter.addAll(f.buildSetterAndGetter());
-			this.classBuilder.addField(f.builder());
+			this.classType.addField(f.builder());
 		}
 		
 		allGetterAndSetter.forEach(m->{
-			this.classBuilder.addMethod(m);
+			this.classType.addMethod(m);
 		});
 		
 		annotationSpec.forEach(a->{
-			this.classBuilder.addAnnotation(a.build());
+			this.classType.addAnnotation(a.build());
 		});
 		
-		return this.classBuilder.build();
+		return this.classType.build();
 	}
 	
 	public void generate(String packageName, String target) throws IOException {
@@ -57,7 +56,7 @@ public class ClassBuilder {
 		this.classFieldBuilderes = classFieldBuilderes;
 	}
 
-	public void addAnnotationSpec(ClassFieldBuilder classFieldBuilder) {
+	public void addClassFieldBuilder(ClassFieldBuilder classFieldBuilder) {
 		classFieldBuilderes.add(classFieldBuilder);
 	}
 	
@@ -77,13 +76,12 @@ public class ClassBuilder {
 		this.className = className;
 	}
 
-	public TypeSpec.Builder getClassBuilder() {
-		return classBuilder;
+	public TypeSpec.Builder getClassType() {
+		return classType;
 	}
 
-	public void setClassBuilder(TypeSpec.Builder classBuilder) {
-		this.classBuilder = classBuilder;
+	public void setClassType(TypeSpec.Builder classType) {
+		this.classType = classType;
 	}
-	
 	
 }
