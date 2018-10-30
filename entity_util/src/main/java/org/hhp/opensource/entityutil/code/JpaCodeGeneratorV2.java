@@ -1,83 +1,44 @@
 package org.hhp.opensource.entityutil.code;
 
 import java.io.IOException;
-import java.io.PrintStream;
 import java.lang.reflect.Type;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import javax.lang.model.element.Modifier;
-
+import org.hhp.opensource.entityutil.structure.ClassBuilder;
+import org.hhp.opensource.entityutil.structure.ClassFieldBuilder;
 import org.hhp.opensource.entityutil.structure.Entity;
 import org.hhp.opensource.entityutil.structure.EntityColumn;
 import org.hhp.opensource.entityutil.structure.EntityReference;
 import org.hhp.opensource.entityutil.structure.EntityTypeMapper;
 import org.hhp.opensource.entityutil.util.Utils;
-
 import com.squareup.javapoet.AnnotationSpec;
 import com.squareup.javapoet.ClassName;
 import com.squareup.javapoet.CodeBlock;
 import com.squareup.javapoet.FieldSpec;
-import com.squareup.javapoet.JavaFile;
 import com.squareup.javapoet.MethodSpec;
 import com.squareup.javapoet.ParameterSpec;
 import com.squareup.javapoet.TypeName;
 import com.squareup.javapoet.TypeSpec;
 import com.squareup.javapoet.TypeSpec.Builder;
 
-public class JpaCodeGenerator {
+public class JpaCodeGeneratorV2 {
 	
-	private Map<String, Integer> hasDealedfields = new HashMap<>();
+	public Map<String, ClassBuilder> relatedEntityBuilder = new HashMap<>();
 	
-	public Map<String,Builder> createClass(List<Entity> entityList,String packageName,String target) {
+	public void generate(List<Entity> entityList,String packageName,String target) {
 		
-		Map<String,Builder> result = new HashMap<>();
 		entityList.forEach(entiry ->{
 			
-			String className = Utils.firstChar2UpperCase(Utils.toHump(entiry.getEntityName())).trim();
-			Builder classBuilder = createClassBuilder(className,entiry.getEntityName());
+			ClassBuilder classBuilder = createClass(entiry);
 			
-			//@Column注解 映射关系注解 getter,setter
-			List<EntityColumn> columnes = entiry.getEntityColumnes();
+			for(EntityColumn column : entiry.getEntityColumnes()) {
+				createFieldBuilder(classBuilder,entiry,column,packageName);
+			}
 			
-			//遍历定义文件中的所有字段定义,创建字段
-			columnes.forEach(columne->{
-				createFieldBuilder(classBuilder,entiry,columne,packageName);
-				hasDealedfields.put(columne.getColumnName(), 1);
-			});
-			
-			//查询references定义中的n:n,1:n创建字段
-			List<EntityReference> references = entiry.getEntityReferences();
-			references.forEach(r ->{
-				if(!hasDealedfields.containsKey(r.getReferer().getName())){
-					
-				}
-			});
-			
-			result.put(className, classBuilder);
-		});
-		
-		return result;
-	}
-	
-	public void generator(List<Entity> entityList,String packageName,String target) {
-		
-		//定义字段生成entity类以及与字段相关的JPA注解
-		Map<String,Builder> bList = createClass(entityList,packageName,target);
-		
-		//双向关联
-		
-		//多对多关联
-		bList.forEach((k,v)->{
-			JavaFile javaFile = JavaFile.builder(packageName, v.build()).build();
-			Path path = Paths.get(target + "/" + k + ".java");
 			try {
-				PrintStream p = new PrintStream(Files.newOutputStream(path));
-				javaFile.writeTo(p);
+				classBuilder.generate(packageName, target);
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -85,45 +46,41 @@ public class JpaCodeGenerator {
 		});
 	}
 	
-	private void createFieldBuilder(Builder classBuilder,Entity entity,EntityColumn columne,String packag){
+	private ClassBuilder createClass(Entity entiry) {
 		
-		List<EntityReference> rList = entity.getEntityReferences();
-		
-		EntityReference fieldReference = null;
-		for(EntityReference entityReference : rList) {
-			if(entityReference.getReferer().getName().equals(columne.getColumnName())) {
-				fieldReference = entityReference;
-				break;
-			}
+		String className = Utils.createClassName(entiry.getEntityName().trim());
+		ClassBuilder classBuilder = this.relatedEntityBuilder.get(className);
+		if(null == classBuilder) {
+			classBuilder = createClassBuilder(className,entiry.getEntityName());
 		}
 		
-		FieldSpec.Builder fieldSpec = null;
-		if(null == fieldReference) {
-			String attrName = Utils.toHump(columne.getColumnName());
-			Type type = EntityTypeMapper.getType(columne.getColumnType());
-			fieldSpec = FieldSpec.builder(type,attrName, Modifier.PRIVATE);
-			
-			addColnumAttn(fieldSpec,columne.getColumnName(),type);
-			addGetter(classBuilder,attrName,type);
-			
-		}else {
-			String memberVariable = Utils.createMemberVariable(fieldReference.getReferenced().getEntityName());
-			TypeName type = ClassName.get(packag, Utils.createClassName(memberVariable));
-			fieldSpec = FieldSpec.builder(type,memberVariable, Modifier.PRIVATE);
-			
-			String referencedClassName = Utils.createClassName(fieldReference.getReferenced().getEntityName());
-			String referenceColumnName = fieldReference.getReferenced().getEntityColumnName();
-			addOrmAttn(fieldSpec,referencedClassName,columne.getColumnName(),referenceColumnName, fieldReference.getReferenceType());
-			addGetter(classBuilder,memberVariable,type);
-		}
+		return classBuilder;
+	}
+	
+	private void createFieldBuilder(ClassBuilder classBuilder,Entity entity,EntityColumn columne,String packag){
 		
+		String columneName = columne.getColumnName();
+		String columnType = columne.getColumnType();
 		
+		List<EntityReference> reference = entity.getEntityReference(columneName);
 		
-		classBuilder.addField(fieldSpec.build());
+		//字段以及注解 
+		String fieldName = Utils.createMemberVariable(columneName);
+		ClassFieldBuilder fieldBuilder = new ClassFieldBuilder();
+		FieldSpec.Builder fieldSpec = FieldSpec.builder(EntityTypeMapper.getType(columnType), fieldName,Modifier.PRIVATE);
+		fieldBuilder.setFieldName(fieldName); 
+		fieldBuilder.setFieldType(columnType);
+		fieldBuilder.setFieldSpec(fieldSpec);
+		addColnumAttn(fieldBuilder);
+		classBuilder.addClassFieldBuilder(fieldBuilder);
+		
+		//引用对象属性以及注解
+		
+		//被引用对象属性以及注解
 		
 	}
 	
-	private Builder createClassBuilder(String className,String entityName) {
+	private ClassBuilder createClassBuilder(String className,String entityName) {
 		//class
 		Builder classBuilder = TypeSpec.classBuilder(className).addModifiers(Modifier.PUBLIC);
 		
@@ -137,7 +94,12 @@ public class JpaCodeGenerator {
 		
 		//添加注解
 		classBuilder.addAnnotation(entityAntt.build()).addAnnotation(tableAntt.build());
-		return classBuilder;
+		
+		ClassBuilder b = new ClassBuilder();
+		b.setClassName(className);
+		b.setClassType(classBuilder);
+		
+		return b;
 	}
 	
 	private void addGetter(Builder classBuilder,String attrName,TypeName colunmType) {
@@ -206,15 +168,18 @@ public class JpaCodeGenerator {
 		fieldBuilder.addAnnotation(ormAnttBuilder.build());
 	}
 	
-	private void addColnumAttn(FieldSpec.Builder fieldBuilder,String columneName,Type colunmType) {
+	private void addColnumAttn(ClassFieldBuilder classFieldBuilder) {
+		String fieldName = classFieldBuilder.getFieldName();
+		
 		AnnotationSpec.Builder columnAnttBuilder = null;
-		if(columneName.equals("id")) {
+		if(fieldName.equals("id")) {
 			columnAnttBuilder = AnnotationSpec.builder(ClassName.get("javax.persistence", "Id"));
 		}else {
 			columnAnttBuilder = AnnotationSpec.builder(ClassName.get("javax.persistence", "Column"));
-			CodeBlock.Builder columnAnttCodeBuilder = CodeBlock.builder().add("$S", columneName);
+			CodeBlock.Builder columnAnttCodeBuilder = CodeBlock.builder().add("$S", fieldName);
 			columnAnttBuilder.addMember("name", columnAnttCodeBuilder.build());
 		}
-		fieldBuilder.addAnnotation(columnAnttBuilder.build());
+		
+		classFieldBuilder.addAnnotationSpec(columnAnttBuilder);
 	}
 }
