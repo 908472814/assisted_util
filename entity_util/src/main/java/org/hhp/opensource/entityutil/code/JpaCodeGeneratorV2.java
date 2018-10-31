@@ -5,7 +5,9 @@ import java.lang.reflect.Type;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 import javax.lang.model.element.Modifier;
+
 import org.hhp.opensource.entityutil.structure.ClassBuilder;
 import org.hhp.opensource.entityutil.structure.ClassFieldBuilder;
 import org.hhp.opensource.entityutil.structure.Entity;
@@ -14,6 +16,7 @@ import org.hhp.opensource.entityutil.structure.EntityReference;
 import org.hhp.opensource.entityutil.structure.EntityTypeMapper;
 import org.hhp.opensource.entityutil.structure.Referenced;
 import org.hhp.opensource.entityutil.util.Utils;
+
 import com.squareup.javapoet.AnnotationSpec;
 import com.squareup.javapoet.ClassName;
 import com.squareup.javapoet.CodeBlock;
@@ -38,9 +41,11 @@ public class JpaCodeGeneratorV2 {
 			for(EntityColumn column : entiry.getEntityColumnes()) {
 				createFieldBuilder(classBuilder,entiry,column,packageName);
 			}
-			
+		});
+		
+		relatedEntityBuilder.forEach((k,v)->{
 			try {
-				classBuilder.generate(packageName, target);
+				v.generate(packageName, target);
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -52,11 +57,12 @@ public class JpaCodeGeneratorV2 {
 		
 		String className = Utils.createClassName(entiry.getEntityName().trim());
 		ClassBuilder classBuilder = this.relatedEntityBuilder.get(className);
+		
 		if(null == classBuilder) {
 			classBuilder = createClassBuilder(className,entiry.getEntityName());
+			this.relatedEntityBuilder.put(className, classBuilder);
 		}
 		
-		this.relatedEntityBuilder.put(className, classBuilder);
 		return classBuilder;
 	}
 	
@@ -97,6 +103,7 @@ public class JpaCodeGeneratorV2 {
 			//逆向映射相关
 			Entity newEntiry = new Entity();
 			newEntiry.setEntityName(r.getReferenced().getEntityName());
+			
 			ClassBuilder referencedClassBuild = this.createClass(newEntiry);
 			
 			FieldSpec.Builder referencedFieldSpecBuilder = null;
