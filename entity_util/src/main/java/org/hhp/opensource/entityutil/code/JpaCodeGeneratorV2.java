@@ -87,8 +87,8 @@ public class JpaCodeGeneratorV2 {
 			
 			ClassFieldBuilder referFieldBuilder = new ClassFieldBuilder();
 			referFieldBuilder.setFieldSpec(referFieldSpecBuilder);
-			referFieldBuilder.setFieldName(r.getReferenced().getClassName());
-			referFieldBuilder.setFieldType(r.getReferenced().getClassName());
+			referFieldBuilder.setFieldName(Utils.firstChar2LowerCase(r.getReferenced().getClassName()));
+			referFieldBuilder.setFieldType(referFieldTypeName.toString());
 			
 			addOrmAttn(referFieldBuilder,r);
 			
@@ -123,7 +123,7 @@ public class JpaCodeGeneratorV2 {
 			referencedFieldBuilder.setFieldName(fildName);
 			referencedFieldBuilder.setFieldType(fileType);
 			
-			addOrmReverseAttn(referencedFieldBuilder,r,classBuilder.getClassName());
+			addOrmReverseAttn(referencedFieldBuilder,r,classBuilder.getClassName(),referFieldBuilder.getFieldName());
 			
 			referencedClassBuild.addClassFieldBuilder(referencedFieldBuilder);
 
@@ -196,7 +196,7 @@ public class JpaCodeGeneratorV2 {
 		classBuilder.addMethod(setgMethodSpec);
 	}
 	
-	private void addOrmReverseAttn(ClassFieldBuilder fieldBuilder,EntityReference r,String className) {
+	private void addOrmReverseAttn(ClassFieldBuilder fieldBuilder,EntityReference r,String className,String mappBy) {
 		
 		String orm = null;
 		
@@ -206,19 +206,10 @@ public class JpaCodeGeneratorV2 {
 			orm = "OneToMany";
 		}
 		
-		Referenced rd = r.getReferenced();
-		
 		AnnotationSpec.Builder ormAnttBuilder = AnnotationSpec.builder(ClassName.get("javax.persistence",orm));
-		CodeBlock.Builder ormAnttCodeBuilder = CodeBlock.builder().add(className + ".class");
-		ormAnttBuilder.addMember("targetEntity", ormAnttCodeBuilder.build());
+		CodeBlock.Builder ormAnttCodeBuilder = CodeBlock.builder().add("$S",mappBy);
+		ormAnttBuilder.addMember("mappedBy", ormAnttCodeBuilder.build());
 		
-		AnnotationSpec.Builder columnAnttBuilder = AnnotationSpec.builder(ClassName.get("javax.persistence", "JoinColumn"));
-		CodeBlock.Builder columnAnttCodeBuilder = CodeBlock.builder().add("$S", rd.getEntityColumnName());
-		CodeBlock.Builder columnAnttCodeBuilder2 = CodeBlock.builder().add("$S",r.getReferer().getName());
-		columnAnttBuilder.addMember("name", columnAnttCodeBuilder.build());
-		columnAnttBuilder.addMember("referencedColumnName", columnAnttCodeBuilder2.build());
-		
-		fieldBuilder.addAnnotationSpec(columnAnttBuilder);
 		fieldBuilder.addAnnotationSpec(ormAnttBuilder);
 		
 	}
