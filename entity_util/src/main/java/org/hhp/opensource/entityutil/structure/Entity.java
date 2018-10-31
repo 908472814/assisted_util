@@ -9,10 +9,21 @@ import java.util.List;
 public class Entity {
 
 	private String entityName;
-	private List<EntityColumn> entityColumnes = new ArrayList<>();
-	private List<EntityReference> entityReferences = new ArrayList<>();
-
 	
+	private List<EntityColumn> entityColumnes = new ArrayList<>();
+	
+	private List<EntityReference> entityReferences = new ArrayList<>();
+	
+	public boolean checekColumnIsUsedInReferences(String columnName) {
+		
+		for(EntityReference r : entityReferences) {
+			if(r.getReferer().getName().equals(columnName)) {
+				return true;
+			}
+		}
+		
+		return false;
+	}
 	
 	public String getEntityName() {
 		return entityName;

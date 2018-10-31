@@ -49,6 +49,19 @@ public class Utils {
 	}
 	
 	/**
+	 * 首字母小写
+	 * @param str string
+	 * @return String
+	 */
+	public static String firstChar2LowerCase(String str) {
+		char firstChar = Character.toLowerCase(str.charAt(0));
+		char [] bigAttrNameChars =str.toCharArray();
+		bigAttrNameChars[0] = firstChar;
+		String bigAttrName = new String(bigAttrNameChars);
+		return bigAttrName;
+	}
+	
+	/**
 	 * 根据正则匹配当字符串
 	 * @param string 字符串
 	 * @param pattern 正则字符串

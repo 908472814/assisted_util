@@ -7,9 +7,9 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+
 import com.squareup.javapoet.AnnotationSpec;
 import com.squareup.javapoet.JavaFile;
-import com.squareup.javapoet.MethodSpec; 
 import com.squareup.javapoet.TypeSpec;
 
 public class ClassBuilder {
@@ -24,15 +24,9 @@ public class ClassBuilder {
 	
 	public TypeSpec build() {
 		
-		List<MethodSpec> allGetterAndSetter = new ArrayList<>();
 		for(ClassFieldBuilder f :this.classFieldBuilderes) {
-			allGetterAndSetter.addAll(f.buildSetterAndGetter());
 			this.classType.addField(f.builder());
 		}
-		
-		allGetterAndSetter.forEach(m->{
-			this.classType.addMethod(m);
-		});
 		
 		annotationSpec.forEach(a->{
 			this.classType.addAnnotation(a.build());

@@ -56,7 +56,7 @@ public class NewSimpleFileReader{
 					entity.addColumn(column);
 					
 				}else if("references".equals(lineType)) {
-					if(lineType.contains("->")) {
+					if(line.contains("->")) {
 						Entity entity = entityList.get(entityList.size()-1);
 						
 						String left = line.split("->")[0].trim();
