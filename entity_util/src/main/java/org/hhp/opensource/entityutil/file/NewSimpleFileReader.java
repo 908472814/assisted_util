@@ -55,6 +55,10 @@ public class NewSimpleFileReader{
 					TableEntityColumn column = new TableEntityColumn(columnName,columnType,columnComment);
 					entity.addColumn(column);
 					
+					if(columnName.equals("id")) {
+						entity.addPrimaryKey(column);
+					}
+					
 				}else if("references".equals(lineType)) {
 					if(line.contains("->")) {
 						TableEntity entity = entityList.get(entityList.size()-1);
@@ -89,11 +93,6 @@ public class NewSimpleFileReader{
 	private Referer createReferer(String left,String referenceType) {
 		return new Referer(left);
 	}
-	
-	
-
-	
-
 	
 	private String checkLineType(String line) {
 		

@@ -8,6 +8,8 @@ import java.util.List;
  */
 public class TableEntity {
 
+	private String packag;
+	
 	private String entityName;
 	
 	private List<TableEntityColumn> primaryKey = new ArrayList<>();
@@ -26,7 +28,19 @@ public class TableEntity {
 		
 		return false;
 	}
+
+	public List<TableEntityColumn> getPrimaryKey() {
+		return primaryKey;
+	}
 	
+	public String getPackag() {
+		return packag;
+	}
+
+	public void setPackag(String packag) {
+		this.packag = packag;
+	}
+
 	public String getEntityName() {
 		return entityName;
 	}

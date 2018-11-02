@@ -34,14 +34,17 @@ public class JpaCodeGenerator {
 	
 	public void generate(List<TableEntity> entityList,String packageName,String target) {
 		
-		//pojo
 		entityList.forEach(entiry ->{
 			
+			//pojo
 			PojoBuilder classBuilder = createClass(entiry);
 			
+			//pojo属性，以及JPA注解
 			for(TableEntityColumn column : entiry.getEntityColumnes()) {
 				createFieldBuilder(classBuilder,entiry,column,packageName);
 			}
+			
+			entiry.setPackag(packageName);
 		});
 		
 		relatedEntityBuilder.forEach((k,v)->{
