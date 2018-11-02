@@ -13,7 +13,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-public class EntityTypeMapper {
+public class TableEntityTypeMapper {
 	private static Map<String, Type> typeMap;
 	static {
 		typeMap = new HashMap<>();

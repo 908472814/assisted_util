@@ -6,7 +6,7 @@ import com.squareup.javapoet.AnnotationSpec;
 import com.squareup.javapoet.FieldSpec;
 import com.squareup.javapoet.MethodSpec;
 
-public class ClassFieldBuilder {
+public class PojoFieldBuilder {
 	
 	private String fieldName;
 	

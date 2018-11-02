@@ -6,17 +6,19 @@ import java.util.List;
 /**
  * 实体定义对象
  */
-public class Entity {
+public class TableEntity {
 
 	private String entityName;
 	
-	private List<EntityColumn> entityColumnes = new ArrayList<>();
+	private List<TableEntityColumn> primaryKey = new ArrayList<>();
 	
-	private List<EntityReference> entityReferences = new ArrayList<>();
+	private List<TableEntityColumn> entityColumnes = new ArrayList<>();
+	
+	private List<TableEntityReference> entityReferences = new ArrayList<>();
 	
 	public boolean checekColumnIsUsedInReferences(String columnName) {
 		
-		for(EntityReference r : entityReferences) {
+		for(TableEntityReference r : entityReferences) {
 			if(r.getReferer().getName().equals(columnName)) {
 				return true;
 			}
@@ -33,32 +35,36 @@ public class Entity {
 		this.entityName = entityName;
 	}
 	
-	public List<EntityColumn> getEntityColumnes() {
+	public List<TableEntityColumn> getEntityColumnes() {
 		return entityColumnes;
 	}
 
-	public void setEntityColumnes(List<EntityColumn> entityColumnes) {
+	public void setEntityColumnes(List<TableEntityColumn> entityColumnes) {
 		this.entityColumnes = entityColumnes;
 	}
 
-	public List<EntityReference> getEntityReferences() {
+	public List<TableEntityReference> getEntityReferences() {
 		return entityReferences;
 	}
 
-	public void setEntityReferences(List<EntityReference> entityReferences) {
+	public void setEntityReferences(List<TableEntityReference> entityReferences) {
 		this.entityReferences = entityReferences;
 	}
+	
+	public void addPrimaryKey(TableEntityColumn entityColumn) {
+		this.primaryKey.add(entityColumn);
+	}
 
-	public void addColumn(EntityColumn entityColumn) {
+	public void addColumn(TableEntityColumn entityColumn) {
 		this.entityColumnes.add(entityColumn);
 	}
 	
-	public void addReference(EntityReference entityReference) {
+	public void addReference(TableEntityReference entityReference) {
 		this.entityReferences.add(entityReference);
 	}
 	
-	public List<EntityReference> getEntityReference(String entityColumn){
-		List<EntityReference> selected = new ArrayList<>();
+	public List<TableEntityReference> getEntityReference(String entityColumn){
+		List<TableEntityReference> selected = new ArrayList<>();
 		
 		this.entityReferences.forEach(r->{
 			if(null!=entityColumn && entityColumn.equals(r.getReferer().getName())) {
@@ -68,11 +74,11 @@ public class Entity {
 		return selected;
 	}
 	
-	public Entity(String entityName) {
+	public TableEntity(String entityName) {
 		this.entityName = entityName;
 	}
 
-	public Entity() {
+	public TableEntity() {
 		
 	}
 }

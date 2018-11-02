@@ -8,12 +8,12 @@ import java.util.Map;
 
 import javax.lang.model.element.Modifier;
 
-import org.hhp.opensource.entityutil.structure.ClassBuilder;
-import org.hhp.opensource.entityutil.structure.ClassFieldBuilder;
-import org.hhp.opensource.entityutil.structure.Entity;
-import org.hhp.opensource.entityutil.structure.EntityColumn;
-import org.hhp.opensource.entityutil.structure.EntityReference;
-import org.hhp.opensource.entityutil.structure.EntityTypeMapper;
+import org.hhp.opensource.entityutil.structure.PojoBuilder;
+import org.hhp.opensource.entityutil.structure.PojoFieldBuilder;
+import org.hhp.opensource.entityutil.structure.TableEntity;
+import org.hhp.opensource.entityutil.structure.TableEntityColumn;
+import org.hhp.opensource.entityutil.structure.TableEntityReference;
+import org.hhp.opensource.entityutil.structure.TableEntityTypeMapper;
 import org.hhp.opensource.entityutil.structure.Referenced;
 import org.hhp.opensource.entityutil.util.Utils;
 
@@ -30,15 +30,16 @@ import com.squareup.javapoet.TypeSpec.Builder;
 
 public class JpaCodeGenerator {
 	
-	public Map<String, ClassBuilder> relatedEntityBuilder = new HashMap<>();
+	public Map<String, PojoBuilder> relatedEntityBuilder = new HashMap<>();
 	
-	public void generate(List<Entity> entityList,String packageName,String target) {
+	public void generate(List<TableEntity> entityList,String packageName,String target) {
 		
+		//pojo
 		entityList.forEach(entiry ->{
 			
-			ClassBuilder classBuilder = createClass(entiry);
+			PojoBuilder classBuilder = createClass(entiry);
 			
-			for(EntityColumn column : entiry.getEntityColumnes()) {
+			for(TableEntityColumn column : entiry.getEntityColumnes()) {
 				createFieldBuilder(classBuilder,entiry,column,packageName);
 			}
 		});
@@ -53,10 +54,10 @@ public class JpaCodeGenerator {
 		});
 	}
 	
-	private ClassBuilder createClass(Entity entiry) {
+	private PojoBuilder createClass(TableEntity entiry) {
 		
 		String className = Utils.createClassName(entiry.getEntityName().trim());
-		ClassBuilder classBuilder = this.relatedEntityBuilder.get(className);
+		PojoBuilder classBuilder = this.relatedEntityBuilder.get(className);
 		
 		if(null == classBuilder) {
 			classBuilder = createClassBuilder(className,entiry.getEntityName());
@@ -66,7 +67,7 @@ public class JpaCodeGenerator {
 		return classBuilder;
 	}
 	
-	private void createFieldBuilder(ClassBuilder classBuilder,Entity entity,EntityColumn columne,String packag){
+	private void createFieldBuilder(PojoBuilder classBuilder,TableEntity entity,TableEntityColumn columne,String packag){
 		
 		//字段以及注解 
 		
@@ -75,8 +76,8 @@ public class JpaCodeGenerator {
 		if(!entity.checekColumnIsUsedInReferences(columneName)) {
 			String columnType = columne.getColumnType();
 			String fieldName = Utils.createMemberVariable(columneName);
-			ClassFieldBuilder fieldBuilder = new ClassFieldBuilder();
-			FieldSpec.Builder fieldSpec = FieldSpec.builder(EntityTypeMapper.getType(columnType), fieldName,Modifier.PRIVATE);
+			PojoFieldBuilder fieldBuilder = new PojoFieldBuilder();
+			FieldSpec.Builder fieldSpec = FieldSpec.builder(TableEntityTypeMapper.getType(columnType), fieldName,Modifier.PRIVATE);
 			fieldBuilder.setFieldName(fieldName); 
 			fieldBuilder.setFieldType(columnType);
 			fieldBuilder.setFieldSpec(fieldSpec);
@@ -85,13 +86,13 @@ public class JpaCodeGenerator {
 		}
 		
 		//生成被引用表字段对应属性以及注解
-		List<EntityReference> reference = entity.getEntityReference(columneName);
+		List<TableEntityReference> reference = entity.getEntityReference(columneName);
 		reference.forEach(r->{
 			
 			TypeName referFieldTypeName = ClassName.get(packag, r.getReferenced().getClassName());
 			FieldSpec.Builder referFieldSpecBuilder = FieldSpec.builder(referFieldTypeName, Utils.firstChar2LowerCase(r.getReferenced().getClassName()), Modifier.PRIVATE);
 			
-			ClassFieldBuilder referFieldBuilder = new ClassFieldBuilder();
+			PojoFieldBuilder referFieldBuilder = new PojoFieldBuilder();
 			referFieldBuilder.setFieldSpec(referFieldSpecBuilder);
 			referFieldBuilder.setFieldName(Utils.firstChar2LowerCase(r.getReferenced().getClassName()));
 			referFieldBuilder.setFieldType(referFieldTypeName.toString());
@@ -101,10 +102,10 @@ public class JpaCodeGenerator {
 			classBuilder.addClassFieldBuilder(referFieldBuilder);
 			
 			//逆向映射相关
-			Entity newEntiry = new Entity();
+			TableEntity newEntiry = new TableEntity();
 			newEntiry.setEntityName(r.getReferenced().getEntityName());
 			
-			ClassBuilder referencedClassBuild = this.createClass(newEntiry);
+			PojoBuilder referencedClassBuild = this.createClass(newEntiry);
 			
 			FieldSpec.Builder referencedFieldSpecBuilder = null;
 			String fildName = null;
@@ -125,7 +126,7 @@ public class JpaCodeGenerator {
 				
 			}
 			
-			ClassFieldBuilder referencedFieldBuilder = new ClassFieldBuilder();
+			PojoFieldBuilder referencedFieldBuilder = new PojoFieldBuilder();
 			referencedFieldBuilder.setFieldSpec(referencedFieldSpecBuilder);
 			referencedFieldBuilder.setFieldName(fildName);
 			referencedFieldBuilder.setFieldType(fileType);
@@ -137,7 +138,7 @@ public class JpaCodeGenerator {
 		});
 	}
 	
-	private ClassBuilder createClassBuilder(String className,String entityName) {
+	private PojoBuilder createClassBuilder(String className,String entityName) {
 		//class
 		Builder classBuilder = TypeSpec.classBuilder(className).addModifiers(Modifier.PUBLIC);
 		
@@ -158,7 +159,7 @@ public class JpaCodeGenerator {
 			.addAnnotation(entityAntt.build())
 			.addAnnotation(tableAntt.build());
 		
-		ClassBuilder b = new ClassBuilder();
+		PojoBuilder b = new PojoBuilder();
 		b.setClassName(className);
 		b.setClassType(classBuilder);
 		
@@ -203,7 +204,7 @@ public class JpaCodeGenerator {
 		classBuilder.addMethod(setgMethodSpec);
 	}
 	
-	private void addOrmReverseAttn(ClassFieldBuilder fieldBuilder,EntityReference r,String className,String mappBy) {
+	private void addOrmReverseAttn(PojoFieldBuilder fieldBuilder,TableEntityReference r,String className,String mappBy) {
 		
 		String orm = null;
 		
@@ -221,7 +222,7 @@ public class JpaCodeGenerator {
 		
 	}
 	
-	private void addOrmAttn(ClassFieldBuilder fieldBuilder,EntityReference r) {
+	private void addOrmAttn(PojoFieldBuilder fieldBuilder,TableEntityReference r) {
 		
 		String orm = null;
 		
@@ -248,7 +249,7 @@ public class JpaCodeGenerator {
 		
 	}
 	
-	private void addColnumAttn(ClassFieldBuilder classFieldBuilder,String columneName) {
+	private void addColnumAttn(PojoFieldBuilder classFieldBuilder,String columneName) {
 		String fieldName = classFieldBuilder.getFieldName();
 		AnnotationSpec.Builder columnAnttBuilder = null;
 		if(fieldName.equals("id")) {

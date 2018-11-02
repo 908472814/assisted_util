@@ -3,7 +3,7 @@ package org.hhp.opensource.entityutil.structure;
 /**
  * 实体字段定义
  */
-public class EntityColumn {
+public class TableEntityColumn {
 	
 	/**
 	 * 字段名称
@@ -29,7 +29,7 @@ public class EntityColumn {
 		return columnName;
 	}
 
-	public EntityColumn(String columnName, String columnType, String columnComment) {
+	public TableEntityColumn(String columnName, String columnType, String columnComment) {
 		this.columnName = columnName;
 		this.columnType = columnType;
 		this.columnComment = columnComment;

@@ -4,7 +4,7 @@ package org.hhp.opensource.entityutil.structure;
  * 实体的引用对象
  *
  */
-public class EntityReference {
+public class TableEntityReference {
 	
 	/**
 	 * 引用方
