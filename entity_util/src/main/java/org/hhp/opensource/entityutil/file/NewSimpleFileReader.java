@@ -8,9 +8,9 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.regex.Pattern;
 
-import org.hhp.opensource.entityutil.structure.Entity;
-import org.hhp.opensource.entityutil.structure.EntityColumn;
-import org.hhp.opensource.entityutil.structure.EntityReference;
+import org.hhp.opensource.entityutil.structure.TableEntity;
+import org.hhp.opensource.entityutil.structure.TableEntityColumn;
+import org.hhp.opensource.entityutil.structure.TableEntityReference;
 import org.hhp.opensource.entityutil.structure.Referenced;
 import org.hhp.opensource.entityutil.structure.Referer;
 
@@ -26,15 +26,15 @@ public class NewSimpleFileReader{
 		this.fileLines = Files.readAllLines(path);
 	}
 	
-	public List<Entity> read() {
-		List<Entity> entityList = new LinkedList<>();
+	public List<TableEntity> read() {
+		List<TableEntity> entityList = new LinkedList<>();
 		
 		fileLines.forEach(line ->{
 			if(StringUtil.isNotBlank(line)) {
 				String lineType = checkLineType(line);
 				
 				if("table".equals(lineType)) {
-					entityList.add(new Entity(line.split("#")[0].trim()));
+					entityList.add(new TableEntity(line.split("#")[0].trim()));
 					
 				}else if("columnStart".equals(lineType)) {
 					System.out.println("开始解析表字段定义");
@@ -46,24 +46,28 @@ public class NewSimpleFileReader{
 					System.out.println("开始解析表引用定义");
 					
 				}else if("column".equals(lineType)) {
-					Entity entity = entityList.get(entityList.size()-1);
+					TableEntity entity = entityList.get(entityList.size()-1);
 					
 					String columnName = line.split(" ")[0].replaceAll("\t","");
 					String columnType = line.split(" ")[1];
 					String columnComment = line.split("#'").length>1?StringUtil.cutBetween(line.split(" ")[2], "#'", "'#"):"";
 					
-					EntityColumn column = new EntityColumn(columnName,columnType,columnComment);
+					TableEntityColumn column = new TableEntityColumn(columnName,columnType,columnComment);
 					entity.addColumn(column);
 					
+					if(columnName.equals("id")) {
+						entity.addPrimaryKey(column);
+					}
+					
 				}else if("references".equals(lineType)) {
-					if(lineType.contains("->")) {
-						Entity entity = entityList.get(entityList.size()-1);
+					if(line.contains("->")) {
+						TableEntity entity = entityList.get(entityList.size()-1);
 						
 						String left = line.split("->")[0].trim();
 						String right = line.split(" ")[2].trim();
 						String referenceType = line.split(" ")[3];
 						
-						EntityReference r = new EntityReference();
+						TableEntityReference r = new TableEntityReference();
 						r.setReferenceType(referenceType);
 						r.setReferenced(createReferenced(right,referenceType));
 						r.setReferer(createReferer(left,referenceType));
@@ -89,11 +93,6 @@ public class NewSimpleFileReader{
 	private Referer createReferer(String left,String referenceType) {
 		return new Referer(left);
 	}
-	
-	
-
-	
-
 	
 	private String checkLineType(String line) {
 		

@@ -7,32 +7,26 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+
 import com.squareup.javapoet.AnnotationSpec;
 import com.squareup.javapoet.JavaFile;
-import com.squareup.javapoet.MethodSpec; 
 import com.squareup.javapoet.TypeSpec;
 
-public class ClassBuilder {
+public class PojoBuilder {
 	
 	private String className;
 	
 	private TypeSpec.Builder classType; 
 	
-	private List<ClassFieldBuilder> classFieldBuilderes = new ArrayList<>();
+	private List<PojoFieldBuilder> classFieldBuilderes = new ArrayList<>();
 	
 	private List<AnnotationSpec.Builder> annotationSpec = new ArrayList<>();
 	
 	public TypeSpec build() {
 		
-		List<MethodSpec> allGetterAndSetter = new ArrayList<>();
-		for(ClassFieldBuilder f :this.classFieldBuilderes) {
-			allGetterAndSetter.addAll(f.buildSetterAndGetter());
+		for(PojoFieldBuilder f :this.classFieldBuilderes) {
 			this.classType.addField(f.builder());
 		}
-		
-		allGetterAndSetter.forEach(m->{
-			this.classType.addMethod(m);
-		});
 		
 		annotationSpec.forEach(a->{
 			this.classType.addAnnotation(a.build());
@@ -48,15 +42,15 @@ public class ClassBuilder {
 		javaFile.writeTo(p);
 	}
 	
-	public List<ClassFieldBuilder> getClassFieldBuilderes() {
+	public List<PojoFieldBuilder> getClassFieldBuilderes() {
 		return classFieldBuilderes;
 	}
 
-	public void setClassFieldBuilderes(List<ClassFieldBuilder> classFieldBuilderes) {
+	public void setClassFieldBuilderes(List<PojoFieldBuilder> classFieldBuilderes) {
 		this.classFieldBuilderes = classFieldBuilderes;
 	}
 
-	public void addClassFieldBuilder(ClassFieldBuilder classFieldBuilder) {
+	public void addClassFieldBuilder(PojoFieldBuilder classFieldBuilder) {
 		classFieldBuilderes.add(classFieldBuilder);
 	}
 	

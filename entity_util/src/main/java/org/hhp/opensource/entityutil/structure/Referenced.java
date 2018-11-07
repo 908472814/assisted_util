@@ -1,5 +1,7 @@
 package org.hhp.opensource.entityutil.structure;
 
+import org.hhp.opensource.entityutil.util.Utils;
+
 /**
  * 被引用方
  */
@@ -15,6 +17,14 @@ public class Referenced {
 		this.entityName = entityName;
 	}
 
+	public String getClassName() {
+		return Utils.createClassName(entityName);
+	}
+	
+	public String getClassAttributeName() {
+		return Utils.createClassName(entityColumnName);
+	}
+	
 	public String getEntityColumnName() {
 		return entityColumnName;
 	}
