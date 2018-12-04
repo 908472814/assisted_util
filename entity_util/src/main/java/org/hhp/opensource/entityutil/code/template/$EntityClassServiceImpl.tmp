@@ -1,0 +1,27 @@
+package org.hhp.opensource.entityutil.code.template;
+
+import javax.persistence.criteria.Order;
+import javax.annotation.Resource;
+
+public class Service implements $EntityClassService{
+
+	@Resource
+	private $EntityClassRepository $EntityClassRepository;
+
+	public void create($EntityClass o){
+	
+	}
+	
+	public void remove(Long id){
+	
+	}
+	
+	public void query(Long id){
+	
+	}
+	
+	public void query(QueryParameters<$EntityClass> param){
+	
+	}
+	
+}

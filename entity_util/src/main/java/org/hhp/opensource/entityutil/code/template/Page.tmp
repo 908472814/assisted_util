@@ -1,0 +1,7 @@
+package org.hhp.opensource.entityutil.code.template;
+
+import javax.persistence.criteria.Order;
+
+public class Page<T> {
+		
+}
