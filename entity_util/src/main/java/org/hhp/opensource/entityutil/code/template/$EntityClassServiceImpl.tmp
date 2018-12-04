@@ -3,10 +3,7 @@ package org.hhp.opensource.entityutil.code.template;
 import javax.persistence.criteria.Order;
 import javax.annotation.Resource;
 
-@Slf4j
-@Service
-@Transactional
-public class $EntityClassService implements $EntityClassService{
+public class Service implements $EntityClassService{
 
 	@Resource
 	private $EntityClassRepository $EntityClassRepository;
@@ -19,11 +16,11 @@ public class $EntityClassService implements $EntityClassService{
 	
 	}
 	
-	public $EntityClass query(Long id){
+	public void query(Long id){
 	
 	}
 	
-	public Page<$EntityClass> query(QueryParameters<$EntityClass> param){
+	public void query(QueryParameters<$EntityClass> param){
 	
 	}
 	
