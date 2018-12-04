@@ -8,8 +8,8 @@ public interface Service {
 	
 	void remove(Long id);
 	
-	void query(Long id);
+	$EntityClass query(Long id);
 	
-	void query(QueryParameters<$EntityClass> param);
+	Page<$EntityClass> query(QueryParameters<$EntityClass> param);
 	
 }

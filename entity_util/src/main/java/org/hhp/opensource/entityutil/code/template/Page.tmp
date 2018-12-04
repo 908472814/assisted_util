@@ -1,7 +1,20 @@
 package org.hhp.opensource.entityutil.code.template;
 
 import javax.persistence.criteria.Order;
+import java.util.List;
 
-public class Page<T> {
-		
+@Getter
+@Setter
+public class Page<$EntityClass> {
+	
+	private List<$EntityClass> content;
+	
+	private Integer pageIndex;
+	
+	private Integer pageSize;
+	
+	private Integer total;
+	
+	private Integer pageNum;
+	
 }
