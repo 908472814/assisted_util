@@ -23,6 +23,6 @@ public class Run {
 		JpaCodeGenerator j = new JpaCodeGenerator();
 		j.generate(rst, "org.hhb.opensource.domain", "D:\\hehuabing\\wkp\\stu\\entity_util_test\\src\\main\\java\\org\\hhb\\opensource\\domain\\");
 		
-		new JpaRepositoryGenertator().generate(rst, "org.hhb.opensource.repository", "D:\\hehuabing\\wkp\\stu\\entity_util_test\\src\\main\\java\\org\\hhb\\opensource\\repository\\");
+//		new JpaRepositoryGenertator().generate(rst, "org.hhb.opensource.repository", "D:\\hehuabing\\wkp\\stu\\entity_util_test\\src\\main\\java\\org\\hhb\\opensource\\repository\\");
 	}
 }

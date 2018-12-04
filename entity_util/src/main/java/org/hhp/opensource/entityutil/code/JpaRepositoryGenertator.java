@@ -2,7 +2,6 @@ package org.hhp.opensource.entityutil.code;
 
 import java.io.BufferedWriter;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -10,14 +9,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.hhp.opensource.entityutil.structure.PojoBuilder;
 import org.hhp.opensource.entityutil.structure.TableEntity;
 import org.hhp.opensource.entityutil.structure.TableEntityColumn;
 import org.hhp.opensource.entityutil.util.Utils;
 
 import jodd.template.ContextTemplateParser;
 import jodd.template.MapTemplateParser;
-import jodd.template.StringTemplateParser;
 
 /**
  * 生成spring data jpa repository接口

@@ -10,11 +10,11 @@ import javax.lang.model.element.Modifier;
 
 import org.hhp.opensource.entityutil.structure.PojoBuilder;
 import org.hhp.opensource.entityutil.structure.PojoFieldBuilder;
+import org.hhp.opensource.entityutil.structure.Referenced;
 import org.hhp.opensource.entityutil.structure.TableEntity;
 import org.hhp.opensource.entityutil.structure.TableEntityColumn;
 import org.hhp.opensource.entityutil.structure.TableEntityReference;
 import org.hhp.opensource.entityutil.structure.TableEntityTypeMapper;
-import org.hhp.opensource.entityutil.structure.Referenced;
 import org.hhp.opensource.entityutil.util.Utils;
 
 import com.squareup.javapoet.AnnotationSpec;
