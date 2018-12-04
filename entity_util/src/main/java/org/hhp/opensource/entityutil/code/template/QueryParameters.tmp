@@ -1,0 +1,14 @@
+package org.hhp.opensource.entityutil.code.template;
+
+@Getter
+@Setter
+public class QueryParameters<T> {
+	
+	private T criteria;
+	
+	List<Order> orders;
+	
+	private Integer pageIndex;
+	
+	private Integer pageSize;
+}

@@ -1,0 +1,9 @@
+package org.hhp.opensource.entityutil.code.template;
+
+@Getter
+@Setter
+public class Orders {
+	private String type;
+	
+	private String attr;
+}

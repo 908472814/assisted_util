@@ -1,0 +1,15 @@
+package org.hhp.opensource.entityutil.code.template;
+
+import javax.persistence.criteria.Order;
+
+public interface Service {
+
+	void create($EntityClass o);
+	
+	void remove(Long id);
+	
+	$EntityClass query(Long id);
+	
+	Page<$EntityClass> query(QueryParameters<$EntityClass> param);
+	
+}
