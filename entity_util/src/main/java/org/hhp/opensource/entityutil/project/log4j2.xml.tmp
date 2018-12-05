@@ -4,6 +4,12 @@
         <Property name="LOG_PATTERN">
         	%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n
         </Property>
+        <Property name="BASE_PATH">
+        	${basePath}
+        </Property>
+        <Property name="LOGGER_FILE_NAME">
+        	${loggerFileName}
+        </Property>
     </Properties>
     
     <Appenders>
@@ -11,7 +17,7 @@
             <PatternLayout pattern="${LOG_PATTERN}"/>
         </Console>
         
-        <RollingFile name="RollingFile" fileName="D:/logs/docCenter.log" filePattern="log/$${date:yyyy-MM}/docCenter-%d{MM-dd-yyyy}-%i.log.gz">
+        <RollingFile name="RollingFile" fileName="${BASE_PATH}/${LOGGER_FILE_NAME}" filePattern="${BASE_PATH}/$${date:yyyy-MM}/docCenter-%d{MM-dd-yyyy}-%i.${LOGGER_FILE_NAME}.gz">
             <PatternLayout pattern="${LOG_PATTERN}"/>
             <SizeBasedTriggeringPolicy size="50MB"/>
         </RollingFile>

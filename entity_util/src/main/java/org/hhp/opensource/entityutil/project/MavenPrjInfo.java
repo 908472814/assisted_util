@@ -14,11 +14,11 @@ public class MavenPrjInfo {
 	
 	private String description;
 	
-	private String partentPrjName;
+	private String parentGroupId = "org.springframework.boot";
 	
-	private String parentPrjArtifactId;
+	private String parentArtifactId = "spring-boot-starter-parent";
 	
-	private String patentPrjVersion;
+	private String patentVersion = "2.0.3.RELEASE";
 
 	public String getGroupId() {
 		return groupId;
@@ -68,28 +68,28 @@ public class MavenPrjInfo {
 		this.description = description;
 	}
 
-	public String getPartentPrjName() {
-		return partentPrjName;
+	public String getParentGroupId() {
+		return parentGroupId;
 	}
 
-	public void setPartentPrjName(String partentPrjName) {
-		this.partentPrjName = partentPrjName;
+	public void setParentGroupId(String parentGroupId) {
+		this.parentGroupId = parentGroupId;
 	}
 
-	public String getParentPrjArtifactId() {
-		return parentPrjArtifactId;
+	public String getParentArtifactId() {
+		return parentArtifactId;
 	}
 
-	public void setParentPrjArtifactId(String parentPrjArtifactId) {
-		this.parentPrjArtifactId = parentPrjArtifactId;
+	public void setParentArtifactId(String parentArtifactId) {
+		this.parentArtifactId = parentArtifactId;
 	}
 
-	public String getPatentPrjVersion() {
-		return patentPrjVersion;
+	public String getPatentVersion() {
+		return patentVersion;
 	}
 
-	public void setPatentPrjVersion(String patentPrjVersion) {
-		this.patentPrjVersion = patentPrjVersion;
+	public void setPatentVersion(String patentVersion) {
+		this.patentVersion = patentVersion;
 	}
 	
 }
