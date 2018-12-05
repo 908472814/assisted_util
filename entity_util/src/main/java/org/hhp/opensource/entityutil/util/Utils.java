@@ -124,10 +124,6 @@ public class Utils {
 		return Utils.toHump(str);
 	}
 	
-	public static String readFileFromClassPath(String fileName) throws IOException {
-		return readFileFromClassPath("org.hhp.opensource.entityutil.code.template",fileName);
-	}
-	
 	public static String readFileFromClassPath(String pkg,String fileName) throws IOException {
 		
 		ClassLoader classLoader = Utils.class.getClassLoader();
@@ -164,19 +160,45 @@ public class Utils {
 		}
 	}
 	
+	/**
+	 * 生成java文件
+	 * @param pkg
+	 * @param className
+	 * @param tmpltName
+	 * @param target
+	 * @param param
+	 */
 	public static void generatorJavaCodeFromClassPathTemplate(String pkg, String className, String tmpltName ,String target, Map<String, String> param) {
-		generatorFileFromClassPathTemplate(target + "/" + Utils.package2path(pkg) + "/", className + ".java", tmpltName, param);
+		String tmpltPkg = "org.hhp.opensource.entityutil.code.template";
+		generatorFileFromClassPathTemplate(target + "/" + Utils.package2path(pkg) + "/", className + ".java", tmpltPkg, tmpltName, param);
 	}
 	
+	/**
+	 * 生成java文件
+	 * @param pkg
+	 * @param className
+	 * @param tmpltName
+	 * @param target
+	 * @param param
+	 */
 	public static <T> void generatorJavaCodeFromClassPathTemplate(String pkg, String className, String tmpltName ,String target, T param) {
-		generatorFileFromClassPathTemplate(target + "/" + Utils.package2path(pkg) + "/", className + ".java", tmpltName, param);
+		String tmpltPkg = "org.hhp.opensource.entityutil.code.template";
+		generatorFileFromClassPathTemplate(target + "/" + Utils.package2path(pkg) + "/", className + ".java", tmpltPkg, tmpltName, param);
 	}
 	
-	public static void generatorFileFromClassPathTemplate(String targetPath, String fileName, String tmpltName, Map<String, String> param) {
+	/**
+	 * 生成普通文件
+	 * @param targetPath
+	 * @param fileName
+	 * @param tmpltPkg
+	 * @param tmpltName
+	 * @param param
+	 */
+	public static void generatorFileFromClassPathTemplate(String targetPath, String fileName, String tmpltPkg, String tmpltName, Map<String, String> param) {
 		
 		String tmplt = null;
 		try {
-			tmplt = Utils.readFileFromClassPath(tmpltName);
+			tmplt = Utils.readFileFromClassPath(tmpltPkg,tmpltName);
 		} catch (IOException e) {
 			e.printStackTrace();
 			return;
@@ -185,14 +207,22 @@ public class Utils {
 		ContextTemplateParser ctpImpl = new MapTemplateParser().of(param);
 		String resultImpl = ctpImpl.parse(tmplt);
 		
-		Utils.writrFile(resultImpl, targetPath, fileName);
+		Utils.writrFile(resultImpl, targetPath + "/", fileName);
 	}
 	
-	public static <T> void generatorFileFromClassPathTemplate(String targetPath, String fileName, String tmpltName, T param) {
+	/**
+	 * 省普通文件
+	 * @param targetPath
+	 * @param fileName
+	 * @param tmpltPkg
+	 * @param tmpltName
+	 * @param param
+	 */
+	public static <T> void generatorFileFromClassPathTemplate(String targetPath, String fileName, String tmpltPkg, String tmpltName, T param) {
 		
 		String tmplt = null;
 		try {
-			tmplt = Utils.readFileFromClassPath(tmpltName);
+			tmplt = Utils.readFileFromClassPath(tmpltPkg,tmpltName);
 		} catch (IOException e) {
 			e.printStackTrace();
 			return;
@@ -201,6 +231,6 @@ public class Utils {
 		ContextTemplateParser ctpImpl = new BeanTemplateParser().of(param);
 		String resultImpl = ctpImpl.parse(tmplt);
 		
-		Utils.writrFile(resultImpl, targetPath, fileName);
+		Utils.writrFile(resultImpl, targetPath + "/", fileName);
 	}
 }

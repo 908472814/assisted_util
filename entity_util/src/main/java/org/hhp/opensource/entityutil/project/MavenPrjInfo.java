@@ -91,5 +91,19 @@ public class MavenPrjInfo {
 	public void setPatentVersion(String patentVersion) {
 		this.patentVersion = patentVersion;
 	}
+
+	public MavenPrjInfo(String groupId, String artifactId, String version, PackagingEnum packaging, String name,String description) {
+		this.groupId = groupId;
+		this.artifactId = artifactId;
+		this.version = version;
+		this.packaging = packaging;
+		this.name = name;
+		this.description = description;
+	}
+
+	public MavenPrjInfo() {
+	}
+	
+	
 	
 }
