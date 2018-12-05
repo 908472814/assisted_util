@@ -18,7 +18,7 @@ public class CommonGenerator {
 		Map<String, String> param = new HashMap<String, String>();
 		param.put("package", pkg);
 		
-		Utils.generatorFromClassPathTemplate(pkg, tmpltName.split("\\.")[0], tmpltName, target, param);
+		Utils.generatorJavaCodeFromClassPathTemplate(pkg, tmpltName.split("\\.")[0], tmpltName, target, param);
 	}
 	
 }

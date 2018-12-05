@@ -47,7 +47,7 @@ public class JpaRepositoryGenertator {
 			ContextTemplateParser ctp = new MapTemplateParser().of(param);
 			String result = ctp.parse(template.toString());
 
-			Utils.writrSourceFile(result, target + "/" + Utils.package2path(packageName) + "/", interfaceName + ".java");
+			Utils.writrFile(result, target + "/" + Utils.package2path(packageName) + "/", interfaceName + ".java");
 		});
 	}
 }

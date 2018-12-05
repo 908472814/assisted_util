@@ -132,11 +132,20 @@ public class Utils {
 		return FileUtil.readString(file);
 	}
 	
+	public static String readFileFromClassPath(String pkg,String fileName) throws IOException {
+		
+		ClassLoader classLoader = Utils.class.getClassLoader();
+		URL url = classLoader.getResource("");
+		File file = new File(url.getFile() + Utils.package2path(pkg) + "/" + fileName);
+		
+		return FileUtil.readString(file);
+	}
+	
 	public static String package2path(String pkg) {
 		return pkg.replace(".", "/");
 	}
 	
-	public static void writrSourceFile(String content,String basePath,String fileName) {
+	public static void writrFile(String content,String basePath,String fileName) {
 		
 		System.out.println("basePath : " + basePath);
 		System.out.println("fileName : " + fileName);
@@ -159,7 +168,7 @@ public class Utils {
 		}
 	}
 	
-	public static void generatorFromClassPathTemplate(String pkg, String className, String tmpltName ,String target, Map<String, String> param) {
+	public static void generatorJavaCodeFromClassPathTemplate(String pkg, String className, String tmpltName ,String target, Map<String, String> param) {
 		
 		String tmplt = null;
 		try {
@@ -172,6 +181,22 @@ public class Utils {
 		ContextTemplateParser ctpImpl = new MapTemplateParser().of(param);
 		String resultImpl = ctpImpl.parse(tmplt);
 		
-		Utils.writrSourceFile(resultImpl, target + "/" + Utils.package2path(pkg) + "/", className + ".java");
+		Utils.writrFile(resultImpl, target + "/" + Utils.package2path(pkg) + "/", className + ".java");
+	}
+	
+	public static void generatorFileFromClassPathTemplate(String targetPath, String fileName, String tmpltName, Map<String, String> param) {
+		
+		String tmplt = null;
+		try {
+			tmplt = Utils.readFileFromClassPath(tmpltName);
+		} catch (IOException e) {
+			e.printStackTrace();
+			return;
+		}
+		
+		ContextTemplateParser ctpImpl = new MapTemplateParser().of(param);
+		String resultImpl = ctpImpl.parse(tmplt);
+		
+		Utils.writrFile(resultImpl, targetPath, fileName);
 	}
 }
