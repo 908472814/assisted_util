@@ -1,7 +1,6 @@
 package org.hhp.opensource.entityutil.code;
 
 import java.io.IOException;
-import java.lang.reflect.Type;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -21,8 +20,6 @@ import com.squareup.javapoet.AnnotationSpec;
 import com.squareup.javapoet.ClassName;
 import com.squareup.javapoet.CodeBlock;
 import com.squareup.javapoet.FieldSpec;
-import com.squareup.javapoet.MethodSpec;
-import com.squareup.javapoet.ParameterSpec;
 import com.squareup.javapoet.ParameterizedTypeName;
 import com.squareup.javapoet.TypeName;
 import com.squareup.javapoet.TypeSpec;
@@ -169,43 +166,43 @@ public class JpaCodeGenerator {
 		return b;
 	}
 	
-	private void addGetter(Builder classBuilder,String attrName,TypeName colunmType) {
-		MethodSpec getMethodSpec = MethodSpec.methodBuilder("get" + Utils.firstChar2UpperCase(attrName))
-			    .addModifiers(Modifier.PUBLIC)
-			    .returns(colunmType)
-			    .addStatement("return this." + attrName)
-			    .build();
-		classBuilder.addMethod(getMethodSpec);
-	}
-	
-	private void addGetter(Builder classBuilder,String attrName,Type colunmType) {
-		MethodSpec getMethodSpec = MethodSpec.methodBuilder("get" + Utils.firstChar2UpperCase(attrName))
-			    .addModifiers(Modifier.PUBLIC)
-			    .returns(colunmType)
-			    .addStatement("return this." + attrName)
-			    .build();
-		classBuilder.addMethod(getMethodSpec);
-	}
-	
-	private void addSetter(Builder classBuilder,String attrName,TypeName colunmType) {
-		ParameterSpec ps = ParameterSpec.builder(colunmType, attrName).build();
-		MethodSpec setgMethodSpec = MethodSpec.methodBuilder("set" + Utils.firstChar2UpperCase(attrName))
-			    .addModifiers(Modifier.PUBLIC)
-			    .addParameter(ps)
-			    .addStatement("this." + attrName + "= " + attrName)
-			    .build();
-		classBuilder.addMethod(setgMethodSpec);
-	}
-	
-	private void addSetter(Builder classBuilder,String attrName,Type colunmType) {
-		ParameterSpec ps = ParameterSpec.builder(colunmType, attrName).build();
-		MethodSpec setgMethodSpec = MethodSpec.methodBuilder("set" + Utils.firstChar2UpperCase(attrName))
-			    .addModifiers(Modifier.PUBLIC)
-			    .addParameter(ps)
-			    .addStatement("this." + attrName + "= " + attrName)
-			    .build();
-		classBuilder.addMethod(setgMethodSpec);
-	}
+//	private void addGetter(Builder classBuilder,String attrName,TypeName colunmType) {
+//		MethodSpec getMethodSpec = MethodSpec.methodBuilder("get" + Utils.firstChar2UpperCase(attrName))
+//			    .addModifiers(Modifier.PUBLIC)
+//			    .returns(colunmType)
+//			    .addStatement("return this." + attrName)
+//			    .build();
+//		classBuilder.addMethod(getMethodSpec);
+//	}
+//	
+//	private void addGetter(Builder classBuilder,String attrName,Type colunmType) {
+//		MethodSpec getMethodSpec = MethodSpec.methodBuilder("get" + Utils.firstChar2UpperCase(attrName))
+//			    .addModifiers(Modifier.PUBLIC)
+//			    .returns(colunmType)
+//			    .addStatement("return this." + attrName)
+//			    .build();
+//		classBuilder.addMethod(getMethodSpec);
+//	}
+//	
+//	private void addSetter(Builder classBuilder,String attrName,TypeName colunmType) {
+//		ParameterSpec ps = ParameterSpec.builder(colunmType, attrName).build();
+//		MethodSpec setgMethodSpec = MethodSpec.methodBuilder("set" + Utils.firstChar2UpperCase(attrName))
+//			    .addModifiers(Modifier.PUBLIC)
+//			    .addParameter(ps)
+//			    .addStatement("this." + attrName + "= " + attrName)
+//			    .build();
+//		classBuilder.addMethod(setgMethodSpec);
+//	}
+//	
+//	private void addSetter(Builder classBuilder,String attrName,Type colunmType) {
+//		ParameterSpec ps = ParameterSpec.builder(colunmType, attrName).build();
+//		MethodSpec setgMethodSpec = MethodSpec.methodBuilder("set" + Utils.firstChar2UpperCase(attrName))
+//			    .addModifiers(Modifier.PUBLIC)
+//			    .addParameter(ps)
+//			    .addStatement("this." + attrName + "= " + attrName)
+//			    .build();
+//		classBuilder.addMethod(setgMethodSpec);
+//	}
 	
 	private void addOrmReverseAttn(PojoFieldBuilder fieldBuilder,TableEntityReference r,String className,String mappBy) {
 		

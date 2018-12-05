@@ -1,5 +1,6 @@
 package org.hhp.opensource.entityutil.structure;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.nio.file.Files;
@@ -7,6 +8,8 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+
+import org.hhp.opensource.entityutil.util.Utils;
 
 import com.squareup.javapoet.AnnotationSpec;
 import com.squareup.javapoet.JavaFile;
@@ -36,8 +39,12 @@ public class PojoBuilder {
 	}
 	
 	public void generate(String packageName, String target) throws IOException {
+		String basePath = target + "/" + Utils.package2path(packageName) + "/";
+		File dir = new File(basePath);
+		dir.mkdirs();
+		
 		JavaFile javaFile = JavaFile.builder(packageName, this.build()).build();
-		Path path = Paths.get(target + "/" + className + ".java");
+		Path path = Paths.get( basePath + className + ".java");
 		PrintStream p = new PrintStream(Files.newOutputStream(path));
 		javaFile.writeTo(p);
 	}

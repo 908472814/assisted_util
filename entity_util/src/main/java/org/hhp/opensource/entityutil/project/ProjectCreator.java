@@ -1,14 +1,16 @@
 package org.hhp.opensource.entityutil.project;
 
-import java.util.List;
-
-import org.hhp.opensource.entityutil.structure.PojoBuilder;
-
 public class ProjectCreator {
 
-	public void createMavenProject(String dest,MavenPrjInfo info,List<PojoBuilder> classBuilder) {
+	public void createMavenProject(String dest,MavenPrjInfo info) {
 
-		//生成项目目录
+		String sourceDir = dest + "/src/main/java";
+		
+		String resourceDir = dest + "/src/main/resources";
+		String resourceStatic = resourceDir + "/static";
+		String resourceTemplates = resourceDir + "/templates";
+		
+		String testDir = dest + "/src/test/java";
 		
 		//生成pom文件
 		

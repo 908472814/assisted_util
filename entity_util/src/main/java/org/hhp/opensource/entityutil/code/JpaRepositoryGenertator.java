@@ -1,10 +1,5 @@
 package org.hhp.opensource.entityutil.code;
 
-import java.io.BufferedWriter;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -52,19 +47,7 @@ public class JpaRepositoryGenertator {
 			ContextTemplateParser ctp = new MapTemplateParser().of(param);
 			String result = ctp.parse(template.toString());
 
-			try {
-				Path fpath = Paths.get(target  + interfaceName + ".java");
-				if(!Files.exists(fpath)) {
-					Files.createFile(fpath);
-				}
-				
-				BufferedWriter writer = Files.newBufferedWriter(fpath);
-				writer.write(result);
-				writer.flush();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			Utils.writrSourceFile(result, target + "/" + Utils.package2path(packageName) + "/", interfaceName + ".java");
 		});
 	}
 }

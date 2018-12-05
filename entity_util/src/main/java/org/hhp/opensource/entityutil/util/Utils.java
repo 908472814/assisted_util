@@ -1,11 +1,22 @@
 package org.hhp.opensource.entityutil.util;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.IOException;
+import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import jodd.io.FileUtil;
+import jodd.template.ContextTemplateParser;
+import jodd.template.MapTemplateParser;
 
 public class Utils {
 	
@@ -110,5 +121,57 @@ public class Utils {
 	
 	public static String createMemberVariable(String str) {
 		return Utils.toHump(str);
+	}
+	
+	public static String readFileFromClassPath(String fileName) throws IOException {
+		
+		ClassLoader classLoader = Utils.class.getClassLoader();
+		URL url = classLoader.getResource("");
+		File file = new File(url.getFile() + "\\org\\hhp\\opensource\\entityutil\\code\\template\\" + fileName);
+		
+		return FileUtil.readString(file);
+	}
+	
+	public static String package2path(String pkg) {
+		return pkg.replace(".", "/");
+	}
+	
+	public static void writrSourceFile(String content,String basePath,String fileName) {
+		
+		System.out.println("basePath : " + basePath);
+		System.out.println("fileName : " + fileName);
+		System.out.println("content : " + content);
+		
+		try {
+			File dir = new File(basePath);
+			dir.mkdirs();
+			
+			Path fpath = Paths.get(basePath  + fileName);
+			if(!Files.exists(fpath)) {
+				Files.createFile(fpath);
+			}
+			
+			BufferedWriter writer = Files.newBufferedWriter(fpath);
+			writer.write(content);
+			writer.flush();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public static void generatorFromClassPathTemplate(String pkg, String className, String tmpltName ,String target, Map<String, String> param) {
+		
+		String tmplt = null;
+		try {
+			tmplt = Utils.readFileFromClassPath(tmpltName);
+		} catch (IOException e) {
+			e.printStackTrace();
+			return;
+		}
+		
+		ContextTemplateParser ctpImpl = new MapTemplateParser().of(param);
+		String resultImpl = ctpImpl.parse(tmplt);
+		
+		Utils.writrSourceFile(resultImpl, target + "/" + Utils.package2path(pkg) + "/", className + ".java");
 	}
 }

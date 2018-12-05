@@ -1,17 +1,20 @@
-package org.hhp.opensource.entityutil.code.template;
+package ${package}.impl;
 
-import javax.persistence.criteria.Order;
 import javax.annotation.Resource;
+import javax.persistence.criteria.Order;
+import org.springframework.transaction.annotation.Transactional;
+import ${package}.repository.${EntityClass}Repository;
+import ${package}.service.dto.*;
+import ${package}.domain.$EntityClass;
 
-@Slf4j
 @Service
 @Transactional
-public class $EntityClassService implements $EntityClassService{
+public class ${EntityClass}ServiceImpl implements ${EntityClass}Service{
 
 	@Resource
-	private $EntityClassRepository $EntityClassRepository;
+	private ${EntityClass}Repository ${EntityClass}Repository;
 
-	public void create($EntityClass o){
+	public void create(${EntityClass} o){
 	
 	}
 	
@@ -23,7 +26,7 @@ public class $EntityClassService implements $EntityClassService{
 	
 	}
 	
-	public Page<$EntityClass> query(QueryParameters<$EntityClass> param){
+	public Page<${EntityClass}> query(QueryParameters<${EntityClass}> param){
 	
 	}
 	

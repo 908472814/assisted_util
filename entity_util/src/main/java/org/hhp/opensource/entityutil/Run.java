@@ -3,8 +3,10 @@ package org.hhp.opensource.entityutil;
 import java.io.IOException;
 import java.util.List;
 
+import org.hhp.opensource.entityutil.code.CommonGenerator;
 import org.hhp.opensource.entityutil.code.JpaCodeGenerator;
 import org.hhp.opensource.entityutil.code.JpaRepositoryGenertator;
+import org.hhp.opensource.entityutil.code.ServiceGenerator;
 import org.hhp.opensource.entityutil.file.NewSimpleFileReader;
 import org.hhp.opensource.entityutil.structure.TableEntity;
 
@@ -19,6 +21,14 @@ public class Run {
 		JpaCodeGenerator j = new JpaCodeGenerator();
 		j.generate(rst, "org.hhb.opensource.domain", "C:\\Users\\admin\\Desktop\\tmp\\gCode");
 		
-		new JpaRepositoryGenertator().generate(rst, "org.hhb.opensource.repository", "C:\\Users\\admin\\Desktop\\tmp\\gCode\\");
+		new JpaRepositoryGenertator().generate(rst, "org.hhb.opensource.repository", "C:\\Users\\admin\\Desktop\\tmp\\gCode");
+		
+		new ServiceGenerator().generate(rst, "org.hhb.opensource.service", "C:\\Users\\admin\\Desktop\\tmp\\gCode");
+		
+		new CommonGenerator().generate("org.hhb.opensource.service.dto", "Orders.tmp", "C:\\Users\\admin\\Desktop\\tmp\\gCode");
+		
+		new CommonGenerator().generate("org.hhb.opensource.service.dto", "Page.tmp", "C:\\Users\\admin\\Desktop\\tmp\\gCode");
+		
+		new CommonGenerator().generate("org.hhb.opensource.service.dto", "QueryParameters.tmp", "C:\\Users\\admin\\Desktop\\tmp\\gCode");
 	}
 }

@@ -1,15 +1,16 @@
-package org.hhp.opensource.entityutil.code.template;
+package ${package};
 
-import javax.persistence.criteria.Order;
+import ${package}.service.dto.*;
+import ${package}.domain.${EntityClass};
 
-public interface Service {
+public interface ${EntityClass}Service {
 
-	void create($EntityClass o);
+	void create(${EntityClass} o);
 	
 	void remove(Long id);
 	
-	$EntityClass query(Long id);
+	${EntityClass} query(Long id);
 	
-	Page<$EntityClass> query(QueryParameters<$EntityClass> param);
+	Page<${EntityClass}> query(QueryParameters<${EntityClass}> param);
 	
 }

@@ -1,13 +1,14 @@
-package org.hhp.opensource.entityutil.code.template;
+package $package;
 
-import javax.persistence.criteria.Order;
 import java.util.List;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Getter
 @Setter
-public class Page<$EntityClass> {
+public class Page<T> {
 	
-	private List<$EntityClass> content;
+	private List<T> content;
 	
 	private Integer pageIndex;
 	
