@@ -14,6 +14,7 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import jodd.bean.BeanTemplateParser;
 import jodd.io.FileUtil;
 import jodd.template.ContextTemplateParser;
 import jodd.template.MapTemplateParser;
@@ -124,12 +125,7 @@ public class Utils {
 	}
 	
 	public static String readFileFromClassPath(String fileName) throws IOException {
-		
-		ClassLoader classLoader = Utils.class.getClassLoader();
-		URL url = classLoader.getResource("");
-		File file = new File(url.getFile() + "\\org\\hhp\\opensource\\entityutil\\code\\template\\" + fileName);
-		
-		return FileUtil.readString(file);
+		return readFileFromClassPath("org.hhp.opensource.entityutil.code.template",fileName);
 	}
 	
 	public static String readFileFromClassPath(String pkg,String fileName) throws IOException {
@@ -169,19 +165,11 @@ public class Utils {
 	}
 	
 	public static void generatorJavaCodeFromClassPathTemplate(String pkg, String className, String tmpltName ,String target, Map<String, String> param) {
-		
-		String tmplt = null;
-		try {
-			tmplt = Utils.readFileFromClassPath(tmpltName);
-		} catch (IOException e) {
-			e.printStackTrace();
-			return;
-		}
-		
-		ContextTemplateParser ctpImpl = new MapTemplateParser().of(param);
-		String resultImpl = ctpImpl.parse(tmplt);
-		
-		Utils.writrFile(resultImpl, target + "/" + Utils.package2path(pkg) + "/", className + ".java");
+		generatorFileFromClassPathTemplate(target + "/" + Utils.package2path(pkg) + "/", className + ".java", tmpltName, param);
+	}
+	
+	public static <T> void generatorJavaCodeFromClassPathTemplate(String pkg, String className, String tmpltName ,String target, T param) {
+		generatorFileFromClassPathTemplate(target + "/" + Utils.package2path(pkg) + "/", className + ".java", tmpltName, param);
 	}
 	
 	public static void generatorFileFromClassPathTemplate(String targetPath, String fileName, String tmpltName, Map<String, String> param) {
@@ -195,6 +183,22 @@ public class Utils {
 		}
 		
 		ContextTemplateParser ctpImpl = new MapTemplateParser().of(param);
+		String resultImpl = ctpImpl.parse(tmplt);
+		
+		Utils.writrFile(resultImpl, targetPath, fileName);
+	}
+	
+	public static <T> void generatorFileFromClassPathTemplate(String targetPath, String fileName, String tmpltName, T param) {
+		
+		String tmplt = null;
+		try {
+			tmplt = Utils.readFileFromClassPath(tmpltName);
+		} catch (IOException e) {
+			e.printStackTrace();
+			return;
+		}
+		
+		ContextTemplateParser ctpImpl = new BeanTemplateParser().of(param);
 		String resultImpl = ctpImpl.parse(tmplt);
 		
 		Utils.writrFile(resultImpl, targetPath, fileName);
