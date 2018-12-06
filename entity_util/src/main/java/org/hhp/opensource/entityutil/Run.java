@@ -29,7 +29,7 @@ public class Run {
 		
 		new ProjectCreator().createMavenProject("C:\\Users\\admin\\Desktop\\tmp\\gCode", mvnInfo);
 		
-		List<TableEntity> rst = new NewSimpleFileReader("D:\\hehuabing\\wkp\\stu\\assisted_util\\entity_util\\src\\main\\java\\org\\hhp\\opensource\\entityutil\\structure\\definition.txt").read();
+		List<TableEntity> rst = new NewSimpleFileReader("C:\\Users\\admin\\Desktop\\tmp\\definition.txt").read();
 		
 		System.out.println(JSON.toJSONString(rst));
 

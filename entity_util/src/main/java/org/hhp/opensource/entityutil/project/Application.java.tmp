@@ -1,4 +1,4 @@
-package org.hhp.stu.spring;
+package ${package};
 
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.CommandLineRunner;

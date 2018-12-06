@@ -47,8 +47,9 @@ public class ProjectCreator {
 		//入口主类
 		Map<String, String> mainClass = new HashMap<>();
 		mainClass.put("mapper.pkg", "");
+		mainClass.put("package", mvnInfo.getGroupId() + "." + mvnInfo.getArtifactId());
 		mainClass.put("entity.pkg", mvnInfo.getGroupId() + "." + mvnInfo.getArtifactId() + ".domain");
-		Utils.generatorFileFromClassPathTemplate(sourceDir, "Application.java", "org.hhp.opensource.entityutil.project", "Application.java.tmp", mainClass);
+		Utils.generatorFileFromClassPathTemplate(sourceDir + "/" + Utils.package2path(mvnInfo.getGroupId() + "." + mvnInfo.getArtifactId()), "Application.java", "org.hhp.opensource.entityutil.project", "Application.java.tmp", mainClass);
 	}
 
 }
