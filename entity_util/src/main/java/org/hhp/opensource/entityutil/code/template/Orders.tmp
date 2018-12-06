@@ -1,6 +1,6 @@
 package $package;
 
-import lombok.NoArgsConstructor;
+import lombok.Getter;
 import lombok.Setter;
 
 @Getter
