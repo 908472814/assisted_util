@@ -1,7 +1,6 @@
 package ${package}.impl;
 
 import javax.annotation.Resource;
-import javax.persistence.criteria.Order;
 import org.springframework.transaction.annotation.Transactional;
 import ${basePackage}.repository.${EntityClass}Repository;
 import ${basePackage}.service.bo.*;
