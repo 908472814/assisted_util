@@ -13,24 +13,22 @@ import ${package}.${EntityClass}Service;
 public class ${EntityClass}ServiceImpl implements ${EntityClass}Service{
 
 	@Resource
-	private ${EntityClass}Repository ${EntityClass}Repository;
+	private ${EntityClass}Repository ${Repository};
 
 	@Override
 	public void create(${EntityClass} o){
-	
+		this.${Repository}.save(o);
 	}
 	
 	@Override
 	public void remove(Long id){
-	
+		this.${Repository}.deleteById(id);
 	}
-	
 	
 	@Override
 	public $EntityClass query(Long id){
-		return null;
+		return this.${Repository}.getOne(id);
 	}
-	
 	
 	@Override
 	public Page<${EntityClass}> query(QueryParameters<${EntityClass}> param){

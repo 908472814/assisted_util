@@ -18,6 +18,7 @@ public class ServiceGenerator {
 			param.put("basePackage", basePackage);
 			param.put("package", packageName);
 			param.put("EntityClass", entityClassName);
+			param.put("Repository", Utils.firstChar2LowerCase(entityClassName+"Repository"));
 			
 			//接口
 			Utils.generatorJavaCodeFromClassPathTemplate(packageName, entityClassName + "Service", "$EntityClassService.tmp", target, param);

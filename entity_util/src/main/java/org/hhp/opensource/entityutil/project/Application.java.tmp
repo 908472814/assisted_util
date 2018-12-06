@@ -9,8 +9,8 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 @SpringBootApplication
 @EnableJpaRepositories
-@MapperScan("${mapper.pkg}")
-@EntityScan(basePackages="${entity.pkg}")
+@MapperScan(basePackages={"${mapper.pkg}"})
+@EntityScan(basePackages={"${entity.pkg}"})
 public class Application implements CommandLineRunner{
 
 	public static void main(String[] args) {
