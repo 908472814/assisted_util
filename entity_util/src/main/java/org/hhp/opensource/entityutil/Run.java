@@ -23,7 +23,7 @@ public class Run {
 		mvnInfo.setGroupId("org.hhp.study");
 		mvnInfo.setArtifactId("test");
 		mvnInfo.setName("test");
-		mvnInfo.setPackaging(PackagingEnum.JAR);
+		mvnInfo.setPackaging(PackagingEnum.jar);
 		mvnInfo.setDescription("test");
 		mvnInfo.setVersion("1.0.0");
 		
