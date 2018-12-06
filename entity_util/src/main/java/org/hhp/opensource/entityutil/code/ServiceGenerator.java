@@ -9,12 +9,13 @@ import org.hhp.opensource.entityutil.util.Utils;
 
 public class ServiceGenerator {
 	
-	public void generate(List<TableEntity> entityList, String packageName, String target) {
+	public void generate(List<TableEntity> entityList, String basePackage, String packageName, String target) {
 		entityList.forEach(entity -> {
 			
 			String entityClassName = Utils.createClassName(entity.getEntityName());
 			
 			Map<String, String> param = new HashMap<String, String>();
+			param.put("basePackage", basePackage);
 			param.put("package", packageName);
 			param.put("EntityClass", entityClassName);
 			

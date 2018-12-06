@@ -3,9 +3,11 @@ package ${package}.impl;
 import javax.annotation.Resource;
 import javax.persistence.criteria.Order;
 import org.springframework.transaction.annotation.Transactional;
-import ${package}.repository.${EntityClass}Repository;
-import ${package}.service.dto.*;
-import ${package}.domain.$EntityClass;
+import ${basePackage}.repository.${EntityClass}Repository;
+import ${basePackage}.service.bo.*;
+import ${basePackage}.domain.${EntityClass};
+import org.springframework.stereotype.Service;
+import ${package}.${EntityClass}Service;
 
 @Service
 @Transactional
@@ -14,18 +16,24 @@ public class ${EntityClass}ServiceImpl implements ${EntityClass}Service{
 	@Resource
 	private ${EntityClass}Repository ${EntityClass}Repository;
 
+	@Override
 	public void create(${EntityClass} o){
 	
 	}
 	
+	@Override
 	public void remove(Long id){
 	
 	}
 	
+	
+	@Override
 	public $EntityClass query(Long id){
 	
 	}
 	
+	
+	@Override
 	public Page<${EntityClass}> query(QueryParameters<${EntityClass}> param){
 	
 	}

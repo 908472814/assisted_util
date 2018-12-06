@@ -37,12 +37,12 @@ public class Run {
 		
 		new JpaRepositoryGenertator().generate(rst, mvnInfo.getGroupId() + "." + mvnInfo.getArtifactId() + ".repository", "C:\\Users\\admin\\Desktop\\tmp\\gCode\\src\\main\\java");
 		
-		new ServiceGenerator().generate(rst, mvnInfo.getGroupId() + "." + mvnInfo.getArtifactId() + ".service", "C:\\Users\\admin\\Desktop\\tmp\\gCode\\src\\main\\java");
+		new ServiceGenerator().generate(rst, mvnInfo.getGroupId() + "." + mvnInfo.getArtifactId(),mvnInfo.getGroupId() + "." + mvnInfo.getArtifactId() + ".service", "C:\\Users\\admin\\Desktop\\tmp\\gCode\\src\\main\\java");
 		
-		new CommonGenerator().generate(mvnInfo.getGroupId() + "." + mvnInfo.getArtifactId() + ".dto", "Orders.tmp", "C:\\Users\\admin\\Desktop\\tmp\\gCode\\src\\main\\java");
+		new CommonGenerator().generate(mvnInfo.getGroupId() + "." + mvnInfo.getArtifactId() + ".service.bo", "Order.tmp", "C:\\Users\\admin\\Desktop\\tmp\\gCode\\src\\main\\java");
 		
-		new CommonGenerator().generate(mvnInfo.getGroupId() + "." + mvnInfo.getArtifactId() + ".dto", "Page.tmp", "C:\\Users\\admin\\Desktop\\tmp\\gCode\\src\\main\\java");
+		new CommonGenerator().generate(mvnInfo.getGroupId() + "." + mvnInfo.getArtifactId() + ".service.bo", "Page.tmp", "C:\\Users\\admin\\Desktop\\tmp\\gCode\\src\\main\\java");
 		
-		new CommonGenerator().generate(mvnInfo.getGroupId() + "." + mvnInfo.getArtifactId() + ".dto", "QueryParameters.tmp", "C:\\Users\\admin\\Desktop\\tmp\\gCode\\src\\main\\java");
+		new CommonGenerator().generate(mvnInfo.getGroupId() + "." + mvnInfo.getArtifactId() + ".service.bo", "QueryParameters.tmp", "C:\\Users\\admin\\Desktop\\tmp\\gCode\\src\\main\\java");
 	}
 }

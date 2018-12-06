@@ -33,7 +33,7 @@ public class JpaRepositoryGenertator {
 			template.append("\n");
 			template.append("import ${pojoImport};\n");
 			template.append("\n");
-			template.append("interface ${Clazz}Repository extends JpaRepository<${pojoClazz},${IDtype}> {\n");
+			template.append("public interface ${Clazz} extends JpaRepository<${pojoClazz},${IDtype}> {\n");
 			template.append("\n");
 			template.append("}\n");
 

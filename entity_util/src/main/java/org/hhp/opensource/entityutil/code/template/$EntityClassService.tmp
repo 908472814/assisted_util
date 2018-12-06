@@ -1,7 +1,7 @@
 package ${package};
 
-import ${package}.service.dto.*;
-import ${package}.domain.${EntityClass};
+import ${basePackage}.service.bo.*;
+import ${basePackage}.domain.${EntityClass};
 
 public interface ${EntityClass}Service {
 
@@ -12,5 +12,4 @@ public interface ${EntityClass}Service {
 	${EntityClass} query(Long id);
 	
 	Page<${EntityClass}> query(QueryParameters<${EntityClass}> param);
-	
 }
