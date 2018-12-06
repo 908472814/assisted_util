@@ -28,13 +28,13 @@ public class ${EntityClass}ServiceImpl implements ${EntityClass}Service{
 	
 	@Override
 	public $EntityClass query(Long id){
-	
+		return null;
 	}
 	
 	
 	@Override
 	public Page<${EntityClass}> query(QueryParameters<${EntityClass}> param){
-	
+		return null;
 	}
 	
 }
