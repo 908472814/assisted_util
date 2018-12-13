@@ -255,7 +255,7 @@ public class JpaCodeGenerator {
 			columnAnttBuilder = AnnotationSpec.builder(ClassName.get("javax.persistence", "Id"));
 			
 			AnnotationSpec.Builder generatedValueAntt = AnnotationSpec.builder(ClassName.get("javax.persistence", "GeneratedValue"));
-			CodeBlock.Builder generatedValueAnttCodeBuilder = CodeBlock.builder().add("javax.persistence.GenerationType.IDENTITY");
+			CodeBlock.Builder generatedValueAnttCodeBuilder = CodeBlock.builder().add("$T.IDENTITY",GenerationType.class);
 			generatedValueAntt.addMember("strategy", generatedValueAnttCodeBuilder.build());
 			
 			classFieldBuilder.addAnnotationSpec(generatedValueAntt);
