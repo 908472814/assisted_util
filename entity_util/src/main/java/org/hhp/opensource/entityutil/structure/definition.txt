@@ -10,3 +10,40 @@ clazz #'班级表'#
 		grade_id Long #'所在班级的主键'
 	references
 		grade_id -> grade.id n:1
+		
+oem
+	column
+		id Long 
+		name String 
+		
+department
+	column
+		id Long 
+		name String 
+		oem_id Long
+	references
+		oem_id -> oem.id n:1
+		
+employee
+	column
+		id Long 
+		name String 
+		department_id Long
+	references
+		department_id -> department.id n:1
+
+workshop
+	column
+		id Long 
+		name String
+		oem_id Long
+	references
+		oem_id -> oem.id n:1
+	
+productionLine
+	column
+		id Long 
+		name String 
+		department_id Long
+	references
+		department_id -> department.id n:1
