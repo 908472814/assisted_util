@@ -4,8 +4,8 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import javax.lang.model.element.Modifier;
+import javax.persistence.GenerationType;
 
 import org.hhp.opensource.entityutil.structure.PojoBuilder;
 import org.hhp.opensource.entityutil.structure.PojoFieldBuilder;
@@ -15,7 +15,6 @@ import org.hhp.opensource.entityutil.structure.TableEntityColumn;
 import org.hhp.opensource.entityutil.structure.TableEntityReference;
 import org.hhp.opensource.entityutil.structure.TableEntityTypeMapper;
 import org.hhp.opensource.entityutil.util.Utils;
-
 import com.squareup.javapoet.AnnotationSpec;
 import com.squareup.javapoet.ClassName;
 import com.squareup.javapoet.CodeBlock;
@@ -235,7 +234,7 @@ public class JpaCodeGenerator {
 		Referenced rd = r.getReferenced();
 		
 		AnnotationSpec.Builder ormAnttBuilder = AnnotationSpec.builder(ClassName.get("javax.persistence",orm));
-		CodeBlock.Builder ormAnttCodeBuilder = CodeBlock.builder().add(rd.getClassName()+ ".class");
+		CodeBlock.Builder ormAnttCodeBuilder = CodeBlock.builder().add(rd.getClassName() + ".class");
 		ormAnttBuilder.addMember("targetEntity", ormAnttCodeBuilder.build());
 		
 		AnnotationSpec.Builder columnAnttBuilder = AnnotationSpec.builder(ClassName.get("javax.persistence", "JoinColumn"));
@@ -254,6 +253,12 @@ public class JpaCodeGenerator {
 		AnnotationSpec.Builder columnAnttBuilder = null;
 		if(fieldName.equals("id")) {
 			columnAnttBuilder = AnnotationSpec.builder(ClassName.get("javax.persistence", "Id"));
+			
+			AnnotationSpec.Builder generatedValueAntt = AnnotationSpec.builder(ClassName.get("javax.persistence", "GeneratedValue"));
+			CodeBlock.Builder generatedValueAnttCodeBuilder = CodeBlock.builder().add("javax.persistence.GenerationType.IDENTITY");
+			generatedValueAntt.addMember("strategy", generatedValueAnttCodeBuilder.build());
+			
+			classFieldBuilder.addAnnotationSpec(generatedValueAntt);
 		}else {
 			columnAnttBuilder = AnnotationSpec.builder(ClassName.get("javax.persistence", "Column"));
 			CodeBlock.Builder columnAnttCodeBuilder = CodeBlock.builder().add("$S", columneName);
