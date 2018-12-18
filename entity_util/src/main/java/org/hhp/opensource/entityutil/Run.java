@@ -1,9 +1,12 @@
 package org.hhp.opensource.entityutil;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.hhp.opensource.entityutil.code.CommonGenerator;
+import org.hhp.opensource.entityutil.code.ControllerGenerator;
 import org.hhp.opensource.entityutil.code.JpaCodeGenerator;
 import org.hhp.opensource.entityutil.code.JpaRepositoryGenertator;
 import org.hhp.opensource.entityutil.code.ServiceGenerator;
@@ -39,10 +42,20 @@ public class Run {
 		
 		new ServiceGenerator().generate(rst, mvnInfo.getGroupId() + "." + mvnInfo.getArtifactId(),mvnInfo.getGroupId() + "." + mvnInfo.getArtifactId() + ".service", "C:\\Users\\admin\\Desktop\\tmp\\gCode\\src\\main\\java");
 		
+		//bo
 		new CommonGenerator().generate(mvnInfo.getGroupId() + "." + mvnInfo.getArtifactId() + ".service.bo", "Order.tmp", "C:\\Users\\admin\\Desktop\\tmp\\gCode\\src\\main\\java");
-		
 		new CommonGenerator().generate(mvnInfo.getGroupId() + "." + mvnInfo.getArtifactId() + ".service.bo", "Page.tmp", "C:\\Users\\admin\\Desktop\\tmp\\gCode\\src\\main\\java");
-		
 		new CommonGenerator().generate(mvnInfo.getGroupId() + "." + mvnInfo.getArtifactId() + ".service.bo", "QueryParameters.tmp", "C:\\Users\\admin\\Desktop\\tmp\\gCode\\src\\main\\java");
+		
+		//vo
+		new CommonGenerator().generate(mvnInfo.getGroupId() + "." + mvnInfo.getArtifactId() + ".controller.vo", "CommonRsp.tmp", "C:\\\\Users\\\\admin\\\\Desktop\\\\tmp\\\\gCode\\\\src\\\\main\\\\java");
+		new CommonGenerator().generate(mvnInfo.getGroupId() + "." + mvnInfo.getArtifactId() + ".controller.vo", "DataRsp.tmp", "C:\\\\Users\\\\admin\\\\Desktop\\\\tmp\\\\gCode\\\\src\\\\main\\\\java");
+		new CommonGenerator().generate(mvnInfo.getGroupId() + "." + mvnInfo.getArtifactId() + ".controller.vo", "ListRsp.tmp", "C:\\\\Users\\\\admin\\\\Desktop\\\\tmp\\\\gCode\\\\src\\\\main\\\\java");
+		
+		Map<String, String> param = new HashMap<String, String>();
+		param.put("serviceBoPkg",mvnInfo.getGroupId() + "." + mvnInfo.getArtifactId() + ".service.bo");
+		new CommonGenerator().generate(mvnInfo.getGroupId() + "." + mvnInfo.getArtifactId() + ".controller.vo", "PageRsp.tmp", "C:\\\\Users\\\\admin\\\\Desktop\\\\tmp\\\\gCode\\\\src\\\\main\\\\java",param);
+		
+		new ControllerGenerator().generate(rst, mvnInfo.getGroupId() + "." + mvnInfo.getArtifactId(),mvnInfo.getGroupId() + "." + mvnInfo.getArtifactId() + ".controller", "C:\\Users\\admin\\Desktop\\tmp\\gCode\\src\\main\\java");
 	}
 }

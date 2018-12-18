@@ -21,4 +21,9 @@ public class CommonGenerator {
 		Utils.generatorJavaCodeFromClassPathTemplate(pkg, tmpltName.split("\\.")[0], tmpltName, target, param);
 	}
 	
+	public void generate(String pkg,String tmpltName,String target,Map<String, String> param) {
+		param.put("package", pkg);
+		Utils.generatorJavaCodeFromClassPathTemplate(pkg, tmpltName.split("\\.")[0], tmpltName, target, param);
+	}
+	
 }

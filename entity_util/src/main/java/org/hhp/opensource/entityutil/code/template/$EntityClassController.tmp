@@ -1,0 +1,55 @@
+package ${package};
+
+import ${basePackage}.service.bo.*;
+import ${basePackage}.service.*;
+import ${basePackage}.domain.${EntityClass};
+import ${vo}.DataRsp;
+import ${vo}.CommonRsp;
+import ${vo}.ListRsp;
+import ${vo}.PageRsp;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import javax.annotation.Resource;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+@RestController
+@RequestMapping("/${path}")
+public class ${EntityClass}Controller {
+
+	@Resource
+	private ${EntityClass}Service ${service};
+
+	@PostMapping("")
+	public CommonRsp create(${EntityClass} o){
+		this.${service}.create(o);	
+		return new CommonRsp();
+	}
+	
+	@DeleteMapping("")
+	public CommonRsp remove(Long id){
+		this.${service}.remove(id);
+		return new CommonRsp();
+	}
+	
+	@GetMapping("/{id}")
+	public DataRsp<${EntityClass}> query(@PathVariable Long id){
+		
+		${EntityClass} result = this.${service}.query(id);
+		DataRsp<${EntityClass}> rsp = new DataRsp<>();
+		rsp.setData(result);
+		
+		return rsp;
+	}
+	
+	public PageRsp<${EntityClass}> query(QueryParameters<${EntityClass}> param){
+		
+		Page<${EntityClass}> result = this.${service}.query(param);
+		PageRsp<${EntityClass}> rsp = new PageRsp<>();
+		rsp.setPage(result);
+		
+		return rsp;
+	}
+}
