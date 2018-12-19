@@ -101,10 +101,11 @@
 			<version>3.7</version>
 		</dependency>
 
+		<!-- https://mvnrepository.com/artifact/com.alibaba/fastjson -->
 		<dependency>
 			<groupId>com.alibaba</groupId>
 			<artifactId>fastjson</artifactId>
-			<version>1.2.6</version>
+			<version>1.2.51</version>
 		</dependency>
 		
 		<dependency>
