@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javax.lang.model.element.Modifier;
+import javax.persistence.FetchType;
 import javax.persistence.GenerationType;
 
 import org.hhp.opensource.entityutil.structure.PojoBuilder;
@@ -216,6 +217,10 @@ public class JpaCodeGenerator {
 		AnnotationSpec.Builder ormAnttBuilder = AnnotationSpec.builder(ClassName.get("javax.persistence",orm));
 		CodeBlock.Builder ormAnttCodeBuilder = CodeBlock.builder().add("$S",mappBy);
 		ormAnttBuilder.addMember("mappedBy", ormAnttCodeBuilder.build());
+		if(orm.equals("OneToMany")){
+			CodeBlock.Builder ormAnttFetchCodeBuilder = CodeBlock.builder().add("$T.LAZY",FetchType.class);
+			ormAnttBuilder.addMember("fetch", ormAnttFetchCodeBuilder.build());
+		}
 		
 		fieldBuilder.addAnnotationSpec(ormAnttBuilder);
 		
@@ -236,6 +241,11 @@ public class JpaCodeGenerator {
 		AnnotationSpec.Builder ormAnttBuilder = AnnotationSpec.builder(ClassName.get("javax.persistence",orm));
 		CodeBlock.Builder ormAnttCodeBuilder = CodeBlock.builder().add(rd.getClassName() + ".class");
 		ormAnttBuilder.addMember("targetEntity", ormAnttCodeBuilder.build());
+		if(orm.equals("ManyToOne")){
+			CodeBlock.Builder ormAnttFetchCodeBuilder = CodeBlock.builder().add("$T.EAGER",FetchType.class);
+			ormAnttBuilder.addMember("fetch", ormAnttFetchCodeBuilder.build());
+		}
+		
 		
 		AnnotationSpec.Builder columnAnttBuilder = AnnotationSpec.builder(ClassName.get("javax.persistence", "JoinColumn"));
 		CodeBlock.Builder columnAnttCodeBuilder = CodeBlock.builder().add("$S", r.getReferer().getName());
