@@ -1,0 +1,11 @@
+package ${package};
+
+import lombok.Getter;
+import lombok.Setter;
+import ${serviceBoPkg}.Page;
+
+@Getter
+@Setter
+public class PageRsp<T> extends CommonRsp {
+	private Page<T> page;
+}

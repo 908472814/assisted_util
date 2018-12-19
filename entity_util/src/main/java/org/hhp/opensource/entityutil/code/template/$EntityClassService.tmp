@@ -1,0 +1,15 @@
+package ${package};
+
+import ${basePackage}.service.bo.*;
+import ${basePackage}.domain.${EntityClass};
+
+public interface ${EntityClass}Service {
+
+	void create(${EntityClass} o);
+	
+	void remove(Long id);
+	
+	${EntityClass} query(Long id);
+	
+	Page<${EntityClass}> query(QueryParameters<${EntityClass}> param);
+}

@@ -1,0 +1,21 @@
+package ${package};
+
+import java.util.List;
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
+public class Page<T> {
+	
+	private List<T> content;
+	
+	private Integer pageIndex;
+	
+	private Integer pageSize;
+	
+	private Integer total;
+	
+	private Integer pageNum;
+	
+}

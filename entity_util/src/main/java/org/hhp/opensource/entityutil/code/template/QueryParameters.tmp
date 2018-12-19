@@ -1,0 +1,18 @@
+package ${package};
+
+import lombok.Getter;
+import lombok.Setter;
+import java.util.List;
+
+@Getter
+@Setter
+public class QueryParameters<T> {
+	
+	private T criteria;
+	
+	List<Order> orders;
+	
+	private Integer pageIndex;
+	
+	private Integer pageSize;
+}

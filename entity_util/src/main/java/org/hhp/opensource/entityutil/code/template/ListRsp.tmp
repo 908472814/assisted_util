@@ -1,0 +1,11 @@
+package ${package};
+
+import lombok.Getter;
+import lombok.Setter;
+import java.util.List;
+
+@Getter
+@Setter
+public class ListRsp<T> extends CommonRsp {
+	private List<T> list;
+}

@@ -1,0 +1,38 @@
+package ${package}.impl;
+
+import javax.annotation.Resource;
+import org.springframework.transaction.annotation.Transactional;
+import ${basePackage}.repository.${EntityClass}Repository;
+import ${basePackage}.service.bo.*;
+import ${basePackage}.domain.${EntityClass};
+import org.springframework.stereotype.Service;
+import ${package}.${EntityClass}Service;
+
+@Service
+@Transactional
+public class ${EntityClass}ServiceImpl implements ${EntityClass}Service{
+
+	@Resource
+	private ${EntityClass}Repository ${Repository};
+
+	@Override
+	public void create(${EntityClass} o){
+		this.${Repository}.save(o);
+	}
+	
+	@Override
+	public void remove(Long id){
+		this.${Repository}.deleteById(id);
+	}
+	
+	@Override
+	public $EntityClass query(Long id){
+		return this.${Repository}.getOne(id);
+	}
+	
+	@Override
+	public Page<${EntityClass}> query(QueryParameters<${EntityClass}> param){
+		return null;
+	}
+	
+}

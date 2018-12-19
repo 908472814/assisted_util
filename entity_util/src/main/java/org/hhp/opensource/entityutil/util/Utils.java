@@ -1,11 +1,23 @@
 package org.hhp.opensource.entityutil.util;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.IOException;
+import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import jodd.bean.BeanTemplateParser;
+import jodd.io.FileUtil;
+import jodd.template.ContextTemplateParser;
+import jodd.template.MapTemplateParser;
 
 public class Utils {
 	
@@ -110,5 +122,115 @@ public class Utils {
 	
 	public static String createMemberVariable(String str) {
 		return Utils.toHump(str);
+	}
+	
+	public static String readFileFromClassPath(String pkg,String fileName) throws IOException {
+		
+		ClassLoader classLoader = Utils.class.getClassLoader();
+		URL url = classLoader.getResource("");
+		File file = new File(url.getFile() + Utils.package2path(pkg) + "/" + fileName);
+		
+		return FileUtil.readString(file);
+	}
+	
+	public static String package2path(String pkg) {
+		return pkg.replace(".", "/");
+	}
+	
+	public static void writrFile(String content,String basePath,String fileName) {
+		
+		System.out.println("basePath : " + basePath);
+		System.out.println("fileName : " + fileName);
+		System.out.println("content : " + content);
+		
+		try {
+			File dir = new File(basePath);
+			dir.mkdirs();
+			
+			Path fpath = Paths.get(basePath  + fileName);
+			if(!Files.exists(fpath)) {
+				Files.createFile(fpath);
+			}
+			
+			BufferedWriter writer = Files.newBufferedWriter(fpath);
+			writer.write(content);
+			writer.flush();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	/**
+	 * 生成java文件
+	 * @param pkg
+	 * @param className
+	 * @param tmpltName
+	 * @param target
+	 * @param param
+	 */
+	public static void generatorJavaCodeFromClassPathTemplate(String pkg, String className, String tmpltName ,String target, Map<String, String> param) {
+		String tmpltPkg = "org.hhp.opensource.entityutil.code.template";
+		generatorFileFromClassPathTemplate(target + "/" + Utils.package2path(pkg) + "/", className + ".java", tmpltPkg, tmpltName, param);
+	}
+	
+	/**
+	 * 生成java文件
+	 * @param pkg
+	 * @param className
+	 * @param tmpltName
+	 * @param target
+	 * @param param
+	 */
+	public static <T> void generatorJavaCodeFromClassPathTemplate(String pkg, String className, String tmpltName ,String target, T param) {
+		String tmpltPkg = "org.hhp.opensource.entityutil.code.template";
+		generatorFileFromClassPathTemplate(target + "/" + Utils.package2path(pkg) + "/", className + ".java", tmpltPkg, tmpltName, param);
+	}
+	
+	/**
+	 * 生成普通文件
+	 * @param targetPath
+	 * @param fileName
+	 * @param tmpltPkg
+	 * @param tmpltName
+	 * @param param
+	 */
+	public static void generatorFileFromClassPathTemplate(String targetPath, String fileName, String tmpltPkg, String tmpltName, Map<String, String> param) {
+		
+		String tmplt = null;
+		try {
+			tmplt = Utils.readFileFromClassPath(tmpltPkg,tmpltName);
+		} catch (IOException e) {
+			e.printStackTrace();
+			return;
+		}
+		
+		ContextTemplateParser ctpImpl = new MapTemplateParser().of(param);
+		String resultImpl = ctpImpl.parse(tmplt);
+		
+		Utils.writrFile(resultImpl, targetPath + "/", fileName);
+	}
+	
+	/**
+	 * 省普通文件
+	 * @param targetPath
+	 * @param fileName
+	 * @param tmpltPkg
+	 * @param tmpltName
+	 * @param param
+	 */
+	public static <T> void generatorFileFromClassPathTemplate(String targetPath, String fileName, String tmpltPkg, String tmpltName, T param) {
+		
+		String tmplt = null;
+		try {
+			tmplt = Utils.readFileFromClassPath(tmpltPkg,tmpltName);
+		} catch (IOException e) {
+			e.printStackTrace();
+			return;
+		}
+		
+		ContextTemplateParser ctpImpl = new BeanTemplateParser().of(param);
+		String resultImpl = ctpImpl.parse(tmplt);
+		
+		Utils.writrFile(resultImpl, targetPath + "/", fileName);
 	}
 }

@@ -1,0 +1,10 @@
+package ${package};
+
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
+public class DataRsp<T> extends CommonRsp {
+	private T data;
+}
