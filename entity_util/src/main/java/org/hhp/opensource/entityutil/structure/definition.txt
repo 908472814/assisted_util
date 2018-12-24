@@ -47,3 +47,23 @@ productionLine
 		department_id Long
 	references
 		department_id -> department.id n:1
+		
+		role
+	column
+		id Long 
+		role_name String 	
+
+department
+	column
+		id Long 
+		department_name String 
+		
+employee
+	column
+		id Long 
+		employee_name String 
+		department_id Long
+		role_id Long
+	references
+		department_id -> department.id n:1
+		role_id -> role.id n:1

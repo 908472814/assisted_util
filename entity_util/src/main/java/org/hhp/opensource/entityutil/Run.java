@@ -30,35 +30,35 @@ public class Run {
 		mvnInfo.setDescription("test2");
 		mvnInfo.setVersion("1.0.0");
 		
-		new ProjectCreator().createMavenProject("C:/Users/houhu/Desktop/tmp/gCode", mvnInfo);
+		new ProjectCreator().createMavenProject("C:/tmp/gCode", mvnInfo);
 		
-		List<TableEntity> rst = new NewSimpleFileReader("C:/Users/houhu/Desktop/tmp/definition.txt").read();
+		List<TableEntity> rst = new NewSimpleFileReader("C:/tmp/yBoss.txt").read();
 		
 		System.out.println(JSON.toJSONString(rst));
 
-		new JpaCodeGenerator().generate(rst, mvnInfo.getGroupId() + "." + mvnInfo.getArtifactId() + ".domain", "C:/Users/houhu/Desktop/tmp/gCode/src/main/java");
+		new JpaCodeGenerator().generate(rst, mvnInfo.getGroupId() + "." + mvnInfo.getArtifactId() + ".domain", "C:/tmp/gCode/src/main/java");
 		
-		new JpaRepositoryGenertator().generate(rst, mvnInfo.getGroupId() + "." + mvnInfo.getArtifactId() + ".repository", "C:/Users/houhu/Desktop/tmp/gCode/src/main/java");
+		new JpaRepositoryGenertator().generate(rst, mvnInfo.getGroupId() + "." + mvnInfo.getArtifactId() + ".repository", "C:/tmp/gCode/src/main/java");
 		
-		new ServiceGenerator().generate(rst, mvnInfo.getGroupId() + "." + mvnInfo.getArtifactId(),mvnInfo.getGroupId() + "." + mvnInfo.getArtifactId() + ".service", "C:/Users/houhu/Desktop/tmp/gCode/src/main/java");
+		new ServiceGenerator().generate(rst, mvnInfo.getGroupId() + "." + mvnInfo.getArtifactId(),mvnInfo.getGroupId() + "." + mvnInfo.getArtifactId() + ".service", "C:/tmp/gCode/src/main/java");
 		
 		//bo
-		new CommonGenerator().generate(mvnInfo.getGroupId() + "." + mvnInfo.getArtifactId() + ".service.bo", "Order.tmp", "C:/Users/houhu/Desktop/tmp/gCode/src/main/java");
-		new CommonGenerator().generate(mvnInfo.getGroupId() + "." + mvnInfo.getArtifactId() + ".service.bo", "Page.tmp", "C:/Users/houhu/Desktop/tmp/gCode/src/main/java");
-		new CommonGenerator().generate(mvnInfo.getGroupId() + "." + mvnInfo.getArtifactId() + ".service.bo", "QueryParameters.tmp", "C:/Users/houhu/Desktop/tmp/gCode/src/main/java");
+		new CommonGenerator().generate(mvnInfo.getGroupId() + "." + mvnInfo.getArtifactId() + ".service.bo", "Order.tmp", "C:/tmp/gCode/src/main/java");
+		new CommonGenerator().generate(mvnInfo.getGroupId() + "." + mvnInfo.getArtifactId() + ".service.bo", "Page.tmp", "C:/tmp/gCode/src/main/java");
+		new CommonGenerator().generate(mvnInfo.getGroupId() + "." + mvnInfo.getArtifactId() + ".service.bo", "QueryParameters.tmp", "C:/tmp/gCode/src/main/java");
 		
 		//vo
-		new CommonGenerator().generate(mvnInfo.getGroupId() + "." + mvnInfo.getArtifactId() + ".controller.vo", "CommonRsp.tmp", "C:/Users/houhu/Desktop/tmp/gCode/src/main/java");
-		new CommonGenerator().generate(mvnInfo.getGroupId() + "." + mvnInfo.getArtifactId() + ".controller.vo", "DataRsp.tmp", "C:/Users/houhu/Desktop/tmp/gCode/src/main/java");
-		new CommonGenerator().generate(mvnInfo.getGroupId() + "." + mvnInfo.getArtifactId() + ".controller.vo", "ListRsp.tmp", "C:/Users/houhu/Desktop/tmp/gCode/src/main/java");
+		new CommonGenerator().generate(mvnInfo.getGroupId() + "." + mvnInfo.getArtifactId() + ".controller.vo", "CommonRsp.tmp", "C:/tmp/gCode/src/main/java");
+		new CommonGenerator().generate(mvnInfo.getGroupId() + "." + mvnInfo.getArtifactId() + ".controller.vo", "DataRsp.tmp", "C:/tmp/gCode/src/main/java");
+		new CommonGenerator().generate(mvnInfo.getGroupId() + "." + mvnInfo.getArtifactId() + ".controller.vo", "ListRsp.tmp", "C:/tmp/gCode/src/main/java");
 		
 		//mapper
-		new CommonGenerator().generate(mvnInfo.getGroupId() + "." + mvnInfo.getArtifactId() + ".mapper", "Mapper.tmp", "C:/Users/houhu/Desktop/tmp/gCode/src/main/java");
+		new CommonGenerator().generate(mvnInfo.getGroupId() + "." + mvnInfo.getArtifactId() + ".mapper", "Mapper.tmp", "C:/tmp/gCode/src/main/java");
 		
 		Map<String, String> param = new HashMap<String, String>();
 		param.put("serviceBoPkg",mvnInfo.getGroupId() + "." + mvnInfo.getArtifactId() + ".service.bo");
-		new CommonGenerator().generate(mvnInfo.getGroupId() + "." + mvnInfo.getArtifactId() + ".controller.vo", "PageRsp.tmp", "C:/Users/houhu/Desktop/tmp/gCode/src/main/java",param);
+		new CommonGenerator().generate(mvnInfo.getGroupId() + "." + mvnInfo.getArtifactId() + ".controller.vo", "PageRsp.tmp", "C:/tmp/gCode/src/main/java",param);
 		
-		new ControllerGenerator().generate(rst, mvnInfo.getGroupId() + "." + mvnInfo.getArtifactId(),mvnInfo.getGroupId() + "." + mvnInfo.getArtifactId() + ".controller", "C:/Users/houhu/Desktop/tmp/gCode/src/main/java");
+		new ControllerGenerator().generate(rst, mvnInfo.getGroupId() + "." + mvnInfo.getArtifactId(),mvnInfo.getGroupId() + "." + mvnInfo.getArtifactId() + ".controller", "C:/tmp/gCode/src/main/java");
 	}
 }

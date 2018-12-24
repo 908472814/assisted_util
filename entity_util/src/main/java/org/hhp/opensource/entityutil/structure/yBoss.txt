@@ -1,0 +1,95 @@
+storehouse #'仓库'#
+	column
+		id Long #"'主键'"#
+		storehouse_code String #"'仓库编号'"#
+		storehouse_name String #'仓库名称'#
+		storehouse_addr String #'仓库位置'#
+		storehouse_location_num Integer #'库位数量'#
+		use_type Short #'仓库使用类型'#
+		goods_type Short #'仓库储物类型'#
+		owner_type Byte #'仓库拥有者类型'#
+		owner_id Long #'仓库拥有者主键'#
+
+storehouse_location #'库位'#
+	column
+		id Long #'主键'#
+		storehouse_location_code String #'库位编码'#
+		length Integer #'长'#
+		width Integer #'宽'#
+		height Integer #'高'#
+		max_weight Integer #'最大重量'#
+		state Byte #'状态'#
+		storehouse_id Long #'仓库数据的主键'#
+	references
+		storehouse_id -> storehouse.id n:1
+
+supplier #'供应商'#
+	column
+		id Long #'主键'#
+		supplier_code String #"'编号'"#
+		supplier_name String #"'名称'"#
+		area_id Long #"'所在行政区域ID'"#
+		address String #"'地址'"#
+		phone_num String #"'联系电话'"#
+		level Byte #"'供应商等级'"#
+	references
+		area_id -> area.id n:1
+
+area
+	column
+		id Long
+		area_code String
+		area_name String
+		area_full_name String
+		p_area_id Long
+	references
+		p_area_id -> area.id n:1
+
+measurement_unit
+	column
+		id Long
+		measurement_unit_code String
+		measurement_unit_name String
+
+materiel
+	column
+		id Long
+		materiel_code String
+		materiel_name String
+		materiel_model String
+		measurement_unit_id Long
+		safety_stock Integer
+		buyer_id Long
+		planner_id Long
+	references
+		buyer_id -> employe.id n:1
+		planner_id -> employe.id n:1
+
+materiel_supplier
+	column
+		id Long
+		supplier_id Long
+		materiel_id Long
+	references
+		supplier_id -> supplier.id n:1
+		materiel_id -> materiel.id n:1
+		
+role
+	column
+		id Long 
+		role_name String 	
+
+department
+	column
+		id Long 
+		department_name String 
+		
+employe
+	column
+		id Long 
+		employee_name String 
+		department_id Long
+		role_id Long
+	references
+		department_id -> department.id n:1
+		role_id -> role.id n:1
