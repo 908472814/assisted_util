@@ -23,11 +23,11 @@ public class Run {
 	public static void main(String[] args) throws IOException {
 		
 		MavenPrjInfo mvnInfo = new MavenPrjInfo();
-		mvnInfo.setGroupId("org.hhp.study");
-		mvnInfo.setArtifactId("test2");
-		mvnInfo.setName("test2");
+		mvnInfo.setGroupId("com.ytech.supplychain");
+		mvnInfo.setArtifactId("bud");
+		mvnInfo.setName("bud");
 		mvnInfo.setPackaging(PackagingEnum.jar);
-		mvnInfo.setDescription("test2");
+		mvnInfo.setDescription("supplychain bud");
 		mvnInfo.setVersion("1.0.0");
 		
 		new ProjectCreator().createMavenProject("C:/tmp/gCode", mvnInfo);

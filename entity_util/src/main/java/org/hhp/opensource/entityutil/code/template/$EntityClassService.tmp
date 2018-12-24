@@ -2,6 +2,7 @@ package ${package};
 
 import ${basePackage}.service.bo.*;
 import ${basePackage}.domain.${EntityClass};
+import java.util.List;
 
 public interface ${EntityClass}Service {
 
@@ -12,4 +13,6 @@ public interface ${EntityClass}Service {
 	${EntityClass} query(Long id);
 	
 	Page<${EntityClass}> query(QueryParameters<${EntityClass}> param);
+	
+	List<${EntityClass}> queryAll();
 }

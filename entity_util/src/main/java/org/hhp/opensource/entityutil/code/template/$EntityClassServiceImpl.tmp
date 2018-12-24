@@ -7,6 +7,7 @@ import ${basePackage}.service.bo.*;
 import ${basePackage}.domain.${EntityClass};
 import org.springframework.stereotype.Service;
 import ${package}.${EntityClass}Service;
+import java.util.List;
 
 @Service
 @Transactional
@@ -33,6 +34,11 @@ public class ${EntityClass}ServiceImpl implements ${EntityClass}Service{
 	@Override
 	public Page<${EntityClass}> query(QueryParameters<${EntityClass}> param){
 		return null;
+	}
+	
+	@Override
+	public List<${EntityClass}> queryAll(){
+		return this.${Repository}.findAll();
 	}
 	
 }
