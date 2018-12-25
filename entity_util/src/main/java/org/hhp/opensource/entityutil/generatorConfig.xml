@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE generatorConfiguration PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN" "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+<generatorConfiguration>
+  <context id="MysqlContext" targetRuntime="MyBatis3" defaultModelType="flat">
+    <jdbcConnection connectionURL="jdbc:mysql://192.168.22.140:3306/whoami" driverClass="com.mysql.jdbc.Driver" password="admin" userId="admin" />
+    <javaModelGenerator targetPackage="com.ytech.supplychain.mybatisGenerator.domain" targetProject="mybatisGenerator" />
+    <sqlMapGenerator targetPackage="com.ytech.supplychain.mybatisGenerator.mapper" targetProject="mybatisGenerator" />
+    <javaClientGenerator targetPackage="com.ytech.supplychain.mybatisGenerator.mapper" targetProject="mybatisGenerator" type="XMLMAPPER" />
+    
+    <table schema="whoami" tableName="%">
+      <generatedKey column="id" sqlStatement="Mysql"/>
+    </table>
+    
+  </context>
+</generatorConfiguration>
