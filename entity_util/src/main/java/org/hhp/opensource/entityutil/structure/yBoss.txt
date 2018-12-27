@@ -61,9 +61,12 @@ materiel
 		safety_stock Integer
 		buyer_id Long
 		planner_id Long
+		materiel_category_id Long
 	references
 		buyer_id -> employe.id n:1
 		planner_id -> employe.id n:1
+		materiel_category_id -> materiel_category.id n:1
+		measurement_unit_id -> measurement_unit.id n:1
 
 materiel_supplier
 	column
@@ -93,3 +96,102 @@ employe
 	references
 		department_id -> department.id n:1
 		role_id -> role.id n:1
+
+materiel_category #'物料类型'#
+	column
+		id Long
+		name String
+		code String
+		level Integer
+		p_category_id Long
+	references
+		p_category_id -> materiel_category.id n:1
+
+packaging_type #"'包装类型'"#
+	column
+		id Long
+		code String
+		name String
+
+purchase_order #"'采购单'"#
+	column
+		id Long
+		
+purchase_order_item #"'采购单项目'"#
+	column
+		id Long
+			
+stck_receipt #"'收货单'"#
+	column
+		id Long
+		serial_number String
+		supplier_id Long
+		receiving_date Timestamp
+		consignee_id Long #"'收货人'"#
+		deliveryman String #"'交貨人货人'"#
+		purchase_order_id Long #"'采购单'"#
+	references
+		consignee_id -> employe.id n:1
+		purchase_order_id -> purchase_order.id n:1
+		
+stck_receipt_item #"'收货单项目'"#
+	column
+		id Long
+		stck_receipt_id Long
+		materiel_id Long
+		min_packaging_type_id Long #"'最小包装单位'"#
+		min_packaging_capacity Integer #"'最小包装容量'"#
+		min_packaging_total Integer #"'包装数量'"#
+		total Integer #"'总量'"#
+	references
+		stck_receipt_id -> stck_receipt.id n:1
+		materiel_id -> materiel.id n:1
+		min_packaging_type_id -> packaging_type.id n:1
+
+stck_stock_category #"'库存分类'"#
+	column
+		id Long
+		name String
+		p_acategory_id Long
+		level Byte
+	references
+		p_category_id -> stck_stock_category.id n:1
+
+stck_stock_category_attr_definition #"'库存分类属性定义'"#
+	column
+		id Long
+		stck_stock_category_id Long
+		attr_name String
+		attr_data_type String
+	references
+		stck_stock_category_id -> stck_stock_category.id n:1
+
+stck_stock #"'库存'"#
+	column
+		id Long
+		materiel_id Long
+		total Integer
+	references
+		materiel_id -> materiel.id 1:1
+
+stck_stock_item #"'库存分项'"#
+	column
+		id Long
+		stck_stock_id Long
+		total Integer
+		stck_stock_item_category_id Long
+	references
+		p_acategory_id -> stck_stock_item_category.id n:1
+		stck_stock_id -> stck_stock.id n:1
+		
+stck_stock_item_attr #"'库存分项属性'"#
+	column
+		id Long
+		stck_stock_item_id Long
+		attr_name String
+		attr_value String
+	references
+		stck_stock_item_id -> stck_stock_item.id n:1
+		
+		
+	

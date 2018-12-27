@@ -89,6 +89,8 @@ public class JpaCodeGenerator {
 		List<TableEntityReference> reference = entity.getEntityReference(columneName);
 		reference.forEach(r->{
 			
+			System.out.println(r.getReferenced().getClassName());
+			
 			TypeName referFieldTypeName = ClassName.get(packag, r.getReferenced().getClassName());
 			FieldSpec.Builder referFieldSpecBuilder = FieldSpec.builder(referFieldTypeName, Utils.firstChar2LowerCase(r.getReferenced().getClassName()), Modifier.PRIVATE);
 			
@@ -229,7 +231,7 @@ public class JpaCodeGenerator {
 	private void addOrmAttn(PojoFieldBuilder fieldBuilder,TableEntityReference r) {
 		
 		String orm = null;
-		
+		System.out.println("==" + r.getReferer().getName());
 		if ("1:1".equals(r.getReferenceType())) {
 			orm = "OneToOne";
 		}else if ("n:1".equals(r.getReferenceType())) {
