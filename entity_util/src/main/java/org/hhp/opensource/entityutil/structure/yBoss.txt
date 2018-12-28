@@ -116,10 +116,23 @@ packaging_type #"'包装类型'"#
 purchase_order #"'采购单'"#
 	column
 		id Long
+		code String
+		supplier_id Long
+		buyer_id Long
+		procurement_time Timestamp
+		state Byte
+	references
+		supplier_id -> supplier.id n:1
+		buyer_id -> employe.id n:1
 		
 purchase_order_item #"'采购单项目'"#
 	column
 		id Long
+		purchase_order_id Long
+		materiel_id Long
+	references
+		purchase_order_id -> purchase_order.id n:1
+		materiel_id -> materiel.id n:1
 			
 stck_receipt #"'收货单'"#
 	column
@@ -133,6 +146,7 @@ stck_receipt #"'收货单'"#
 	references
 		consignee_id -> employe.id n:1
 		purchase_order_id -> purchase_order.id n:1
+		supplier_id -> supplier.id n:1
 		
 stck_receipt_item #"'收货单项目'"#
 	column
