@@ -183,7 +183,7 @@ stck_stock_item #"'库存分项'"#
 	references
 		p_acategory_id -> stck_stock_item_category.id n:1
 		stck_stock_id -> stck_stock.id n:1
-		stck_stock_category_id -> stck_stock_category_id.id n:1
+		stck_stock_category_id -> stck_stock_category.id n:1
 		
 stck_stock_item_attr #"'库存分项属性'"#
 	column
