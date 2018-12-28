@@ -179,10 +179,11 @@ stck_stock_item #"'库存分项'"#
 		id Long
 		stck_stock_id Long
 		total Integer
-		stck_stock_item_category_id Long
+		stck_stock_category_id Long
 	references
 		p_acategory_id -> stck_stock_item_category.id n:1
 		stck_stock_id -> stck_stock.id n:1
+		stck_stock_category_id -> stck_stock_category_id.id n:1
 		
 stck_stock_item_attr #"'库存分项属性'"#
 	column
@@ -192,6 +193,15 @@ stck_stock_item_attr #"'库存分项属性'"#
 		attr_value String
 	references
 		stck_stock_item_id -> stck_stock_item.id n:1
+
+stck_stock_process
+	column
+		id Long
 		
+stck_stock_process_action
+	column
+		id Long
+		name String
+		sequence Short
 		
 	
