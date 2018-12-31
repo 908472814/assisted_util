@@ -1,0 +1,28 @@
+dict_table_catalog
+	column
+		id Long
+		name String
+		alias String
+
+dict_table
+	column
+		id Long
+		name String
+		alias String
+		dict_table_catalog_id Long
+	references
+		dict_table_catalog_id -> dict_table_catalog.id n:1
+
+dict_column
+	column
+		id Long
+		name String
+		alias String
+		data_type String
+		data_type_range String
+		nullable Boolean
+		dict_table_id Long
+		foreign_key Long
+	references
+		dict_table_id -> dict_table.id n:1
+		foreign_key -> dict_column.id n:1

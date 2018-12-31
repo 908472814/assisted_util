@@ -32,7 +32,7 @@ public class Run {
 		
 		new ProjectCreator().createMavenProject("C:/tmp/gCode", mvnInfo);
 		
-		List<TableEntity> rst = new NewSimpleFileReader("C:/tmp/yBoss.txt").read();
+		List<TableEntity> rst = new NewSimpleFileReader("C:/tmp/dataDict").read();
 		
 		System.out.println(JSON.toJSONString(rst));
 
