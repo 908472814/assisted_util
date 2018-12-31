@@ -218,33 +218,4 @@ stck_stock_process_action
 		name String
 		sequence Short
 		
-department
-	column
-		id Long 
-		department_name String
-		
-production_structure
-	column
-		id Long
-		name String 
-		type String
-		p_production_structure_id Long
-	references
-		p_production_structure_id -> production_structure.id n:1
-		
-production_structure_materiel
-	column
-		id Long
-		production_structure_id Long
-		materiel_id Long
-	references
-		production_structure_id -> production_structure.id n:1
-		materiel_id -> materiel.id n:1
-		
-andon_problem_type
-	column
-		id Long
-		code String
-		name String
-		level Short
-		
+	
